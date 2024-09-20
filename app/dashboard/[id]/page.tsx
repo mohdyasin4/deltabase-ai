@@ -29,7 +29,10 @@ import toast from "react-hot-toast";
 import NProgress from "nprogress";
 
 export default function DatabasePage() {
-  async function fetchConnectionName(id: string) {
+  async function fetchConnectionName(id: string | string[]) {
+    if (Array.isArray(id)) {
+      id = id[0]; // Use the first element if it's an array
+    }
     const { data, error } = await supabaseClient
       .from("database_connections")
       .select("connection_name")
