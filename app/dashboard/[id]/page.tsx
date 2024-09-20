@@ -23,7 +23,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/modal";
-import twilight from "./themes/twilight.json";
+import twilight from "./themes/Twilight.json";
 import MonacoEditor from "@monaco-editor/react";
 import toast from "react-hot-toast";
 import NProgress from "nprogress";

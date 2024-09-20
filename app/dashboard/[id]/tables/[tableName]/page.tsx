@@ -6,7 +6,7 @@ import { useRouter } from '@/hooks/useRouter';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { DataTable } from '@/app/dashboard/(components)/data-table';
+import { DataTable } from '@/app/dashboard/_components/data-table';
 
 export default function TablePage() {
   const router = useRouter();
