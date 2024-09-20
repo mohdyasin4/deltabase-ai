@@ -26,7 +26,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string; 
     switch (database_type) {
       case 'postgres':
         const pgClient = await connectToPostgres({ host, database: database_name, user: username, password });
-        tableData = await queryPostgresTable(pgClient, tableName);
+        const pgResult = await queryPostgresTable(pgClient, tableName);
+        tableData = { columns: pgResult.fields.map(field => field.name), rows: pgResult.rows };
         await pgClient.end();
         break;
       case 'mysql':
@@ -36,7 +37,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string; 
         break;
       case 'mongodb':
         const mongoDb = await connectToMongoDB({ host, database: database_name, user: username, password });
-        tableData = await queryMongoDBCollection(mongoDb, tableName);
+        const mongoData = await queryMongoDBCollection(mongoDb, tableName);
+        tableData = { columns: Object.keys(mongoData[0] || {}), rows: mongoData };
         await mongoDb.client.close();
         break;
       default:
