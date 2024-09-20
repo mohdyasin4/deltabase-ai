@@ -154,7 +154,7 @@ export default function DatabasePage() {
       console.error("Error executing query", error);
     }
     setQueryLoading(false);
-    onOpenChange(false); // Close the modal
+    onOpenChange(); // Close the modal
   };
 
   if (loading) {
