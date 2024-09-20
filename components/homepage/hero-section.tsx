@@ -3,8 +3,9 @@ import { ArrowRight, Github } from 'lucide-react';
 import Link from "next/link";
 import { BorderBeam } from "../magicui/border-beam";
 import { Button } from "../ui/button";
-export default function HeroSection() {
+import Image from 'next/image';
 
+export default function HeroSection() {
     return (
         <div className='flex flex-col items-center justify-center leading-6 mt-[3rem]'>
             {/* <div className="my-5"
@@ -30,14 +31,18 @@ export default function HeroSection() {
             <div>
                 <div className="relative flex max-w-6xl justify-center overflow-hidden mt-7 ">
                     <div className="relative rounded-xl">
-                        <img
+                        <Image
                             src="https://utfs.io/f/31dba2ff-6c3b-4927-99cd-b928eaa54d5f-5w20ij.png"
                             alt="Hero Image"
+                            width={1200}
+                            height={1200}
                             className="block w-[1200px] rounded-[inherit] border object-contain shadow-lg dark:hidden"
                         />
-                        <img
+                        <Image
                             src="https://utfs.io/f/69a12ab1-4d57-4913-90f9-38c6aca6c373-1txg2.png"
                             alt="Hero Image"
+                            width={1200}
+                            height={1200}
                             className="dark:block w-[1200px] rounded-[inherit] border object-contain shadow-lg hidden"
                         />
                         <BorderBeam size={250} duration={12} delay={9} />

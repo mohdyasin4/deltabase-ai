@@ -30,6 +30,7 @@ const logos = [
     url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg',
   },
 ]
+import Image from 'next/image';
 
 const AnimatedLogoCloud = () => {
   return (
@@ -50,7 +51,7 @@ const AnimatedLogoCloud = () => {
                 className="flex shrink-0 animate-logo-cloud flex-row justify-around gap-6"
               >
                 {logos.map((logo, key) => (
-                  <img
+                  <Image
                     key={key}
                     src={logo.url}
                     className="h-10 w-28 px-2"

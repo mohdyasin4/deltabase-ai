@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
@@ -45,18 +45,18 @@ export default function DatabasePage() {
   });
 
   // Fetch data function
-  async function getData(): Promise<any[]> {
+  const getData = useCallback(async (): Promise<any[]> => {
     if (!user) return [];
     const { data, error } = await supabaseClient
       .from("database_connections")
       .select("id, connection_name")
-      .eq("user_id", user.id); // Filter by user ID
+      .eq("user_id", user.id);
     if (error) {
       console.error("Error fetching data from Supabase", error);
       return [];
     }
     return data;
-  }
+  }, [user, supabaseClient]);
 
   useEffect(() => {
     if (user && session) {
@@ -65,7 +65,7 @@ export default function DatabasePage() {
         setLoading(false);
       });
     }
-  }, [user, session, getData]); // Add getData to the dependency array
+  }, [user, session, getData]);
 
   const handleDialogOpen = () => setIsDialogOpen(true);
   const handleDialogClose = () => setIsDialogOpen(false);

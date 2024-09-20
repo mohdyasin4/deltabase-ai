@@ -1,5 +1,3 @@
-
-// app/api/database/[id]/tables/[tableName]/route.ts  
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseClient } from '@/lib/supabaseClient';
 import { connectToPostgres, queryPostgresTable, connectToMySQL, queryMySQLTable, connectToMongoDB, queryMongoDBCollection } from '@/utils/databaseUtils';
@@ -24,7 +22,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string; 
   const { database_type, host, database_name, username, password } = data;
 
   try {
-    let tableData: any[] = [];
+    let tableData: { columns: string[], rows: any[] };
     switch (database_type) {
       case 'postgres':
         const pgClient = await connectToPostgres({ host, database: database_name, user: username, password });
