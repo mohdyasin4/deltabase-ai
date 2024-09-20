@@ -16,17 +16,17 @@ export default function Settings() {
         <div className='flex w-full gap-3 mt-3'>
           <div className='flex flex-col gap-3 w-full'>
             <Label>First Name</Label>
-            <Input disabled defaultValue={user?.user?.firstName ? user?.user?.firstName : ""} />
+            <Input disabled defaultValue={user?.firstName ?? ""} />
           </div>
           <div className='flex flex-col gap-3 w-full'>
             <Label>Last Name</Label>
-            <Input disabled defaultValue={user?.user?.lastName ? user?.user?.lastName : ""} />
+            <Input disabled defaultValue={user?.lastName ?? ""} />
           </div>
         </div>
         <div className='flex flex-col gap-3'>
           <div className='flex flex-col gap-3'>
             <Label>E-mail</Label>
-            <Input disabled defaultValue={user?.user?.emailAddresses?.[0]?.emailAddress!} />
+            <Input disabled defaultValue={user?.primaryEmailAddress?.emailAddress ?? ""} />
           </div>
         </div>
       </div>
