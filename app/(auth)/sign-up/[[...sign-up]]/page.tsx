@@ -20,7 +20,6 @@ import { FaFile, FaGithub, FaGoogle } from "react-icons/fa";
 import { Icons } from "@/components/ui/icons";
 import { SignUp } from "@clerk/nextjs";
 import { dark, shadesOfPurple } from "@clerk/themes";
-import { ModeToggle } from "@/components/ModeToggle";
 
 export default function SignUpPage() {
   return (
