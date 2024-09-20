@@ -98,6 +98,56 @@ export const VideoPlayer: React.FC<CustomVideoPlayerProps> = ({ videoSrc }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player) return;
+
+    const handleMouseLeave = () => {
+      if (isPlaying) {
+        setShowControls(false);
+      }
+    };
+
+    const checkMouseInactivity = () => {
+      const currentTime = Date.now();
+      if (currentTime - lastMouseMoveTime > 3000 && isFullscreen) {
+        setShowControls(false);
+      }
+    };
+
+    player.addEventListener("mouseleave", handleMouseLeave);
+    const inactivityInterval = setInterval(checkMouseInactivity, 1000);
+
+    return () => {
+      player.removeEventListener("mouseleave", handleMouseLeave);
+      clearInterval(inactivityInterval);
+    };
+  }, [playerRef, isFullscreen, lastMouseMoveTime]);
+
+  useEffect(() => {
+    if (!isFullscreen) {
+      setShowControls(true);
+    }
+  }, [isFullscreen]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setShowControls(true);
+    }
+  }, [isPlaying]);
+
   const togglePlay = useCallback(() => {
     if (!videoRef.current) return;
     videoRef.current[isPlaying ? 'pause' : 'play']();

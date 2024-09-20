@@ -65,7 +65,7 @@ export default function DatabasePage() {
         setLoading(false);
       });
     }
-  }, [user, session]);
+  }, [user, session, getData]); // Add getData to the dependency array
 
   const handleDialogOpen = () => setIsDialogOpen(true);
   const handleDialogClose = () => setIsDialogOpen(false);

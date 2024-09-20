@@ -24,6 +24,7 @@ const logos = [
     url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg',
   },
 ]
+import Image from 'next/image';
 
 const StaticLogoCloud = () => {
   return (
@@ -33,7 +34,7 @@ const StaticLogoCloud = () => {
         <div className="group relative flex gap-6 px-2">
           <div className="flex shrink-0 flex-row justify-around gap-6">
             {logos.map((logo, key) => (
-              <img
+              <Image
                 key={key}
                 src={logo.url}
                 className="h-10 w-28 px-2 brightness-0"

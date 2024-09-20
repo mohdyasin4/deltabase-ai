@@ -46,9 +46,10 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export default function NavBar() {
+  const auth = useAuth();
   let userId = null;
   if (config?.auth?.enabled) {
-    const user = useAuth();
+    const user = auth;
     userId = user?.userId;
   }
   // get current theme in theme context
