@@ -3648,6 +3648,11 @@
   dependencies:
     undici-types "~6.19.2"
 
+"@types/nprogress@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.npmjs.org/@types/nprogress/-/nprogress-0.2.3.tgz"
+  integrity sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==
+
 "@types/phoenix@^1.5.4":
   version "1.6.5"
   resolved "https://registry.npmjs.org/@types/phoenix/-/phoenix-1.6.5.tgz"
