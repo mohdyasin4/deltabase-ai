@@ -122,8 +122,8 @@ export default function DatabasePage() {
     NProgress.done();
   };
 
-  const handleSqlChange = (value: string) => {
-    setSqlQuery(value);
+  const handleSqlChange = (value: string | undefined) => {
+    setSqlQuery(value || '');
   };
 
   const handleSqlSubmit = async () => {
@@ -216,7 +216,7 @@ export default function DatabasePage() {
                   defaultValue=""
                   onChange={handleSqlChange}
                   onMount={handleEditorDidMount}
-                  theme={"vs-dark"}
+                  theme="vs-dark"
                   options={{
                     minimap: { enabled: false },
                     wordWrap: "on",
