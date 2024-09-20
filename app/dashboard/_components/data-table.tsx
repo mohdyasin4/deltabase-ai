@@ -19,7 +19,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { DataTablePagination } from "@/app/dashboard/(components)/data-table-pagination";
+import { DataTablePagination } from "@/app/dashboard/_components/data-table-pagination";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
