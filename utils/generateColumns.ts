@@ -12,7 +12,7 @@ export function generateColumns<T extends object>(rows: T[]): ColumnDef<T>[] {
     {
       id: "select",
       header: ({ table }) => {
-        const isChecked = table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate");
+        const isChecked = table.getIsAllPageRowsSelected() || table.getIsSomePageRowsSelected();
         return createElement(Checkbox, {
           isSelected: isChecked,
           onChange: (e) => table.toggleAllPageRowsSelected(e.target.checked),
@@ -35,7 +35,7 @@ export function generateColumns<T extends object>(rows: T[]): ColumnDef<T>[] {
       accessorKey: key as string,
       header: key.toString().charAt(0).toUpperCase() + key.toString().slice(1),
       enableSorting: true,
-      cell: (info) => info.getValue(),
+      cell: (info: { getValue: () => any; }) => info.getValue(),
     }))
   ];
 }
