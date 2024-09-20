@@ -85,7 +85,7 @@ export const DataTable = <T extends object>({ rows }: DataTableProps<T>) => {
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
+                    onCheckedChange={(value: any) =>
                       column.toggleVisibility(!!value)
                     }
                   >
