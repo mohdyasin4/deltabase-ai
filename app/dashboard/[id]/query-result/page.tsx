@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { useRouter } from "@/hooks/useRouter";
 import { Spinner } from "@/components/ui/spinner";
-import { DataTable } from "../../(components)/data-table"; // Adjust the path as needed
+import { DataTable } from "@/app/dashboard/_components/data-table"; // Adjust the path as needed
 import toast from "react-hot-toast";
 import { Card } from "@/components/ui/card";
 import {
