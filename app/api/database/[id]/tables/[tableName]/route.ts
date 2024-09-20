@@ -1,3 +1,4 @@
+// app/api/database/[id]/tables/[tableName]/route.ts  
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseClient } from '@/lib/supabaseClient';
 import { connectToPostgres, queryPostgresTable, connectToMySQL, queryMySQLTable, connectToMongoDB, queryMongoDBCollection } from '@/utils/databaseUtils';
@@ -27,7 +28,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string; 
       case 'postgres':
         const pgClient = await connectToPostgres({ host, database: database_name, user: username, password });
         const pgResult = await queryPostgresTable(pgClient, tableName);
-        tableData = { columns: pgResult.fields.map(field => field.name), rows: pgResult.rows };
+        if (Array.isArray(pgResult) && pgResult.length > 0) {
+          tableData = { 
+            columns: Object.keys(pgResult[0]), 
+            rows: pgResult 
+          };
+        } else {
+          tableData = { columns: [], rows: [] };
+        }
         await pgClient.end();
         break;
       case 'mysql':
