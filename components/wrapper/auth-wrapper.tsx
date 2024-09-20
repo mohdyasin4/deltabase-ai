@@ -15,6 +15,9 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     <ClerkProvider
       appearance={{
         baseTheme: dark,
+        layout: {
+          unsafe_disableDevelopmentModeWarnings: true,
+        }
       }}
     >
       {children}
