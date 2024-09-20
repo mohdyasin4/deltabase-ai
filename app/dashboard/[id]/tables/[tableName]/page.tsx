@@ -55,7 +55,11 @@ export default function TablePage() {
   return (
     <main className="flex flex-col gap-2 px-8 py-4 lg:gap-2 min-h-[90vh] w-full">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Table: &nbsp;{tableName.charAt(0).toUpperCase() + tableName.slice(1).replace(/_/g," ")}</h1>
+        <h1 className="text-3xl font-bold">
+          Table: &nbsp;{Array.isArray(tableName) 
+            ? tableName[0].charAt(0).toUpperCase() + tableName[0].slice(1).replace(/_/g," ")
+            : tableName.charAt(0).toUpperCase() + tableName.slice(1).replace(/_/g," ")}
+        </h1>
         <Button onClick={() => router.back()}>Back</Button>
       </div>
       <div className="w-full mt-6 rounded-none">
