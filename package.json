@@ -93,6 +93,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/nprogress": "^0.2.3",
+    "@types/pg": "^8.11.10",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
