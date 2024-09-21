@@ -26,24 +26,51 @@ export const userCreate = async ({
   );
 
   try {
-    const { data, error } = await supabase
+    // First, check if a user with this email already exists
+    const { data: existingUser, error: checkError } = await supabase
       .from("user")
-      .insert([
-        {
-          email,
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (checkError && checkError.code !== "PGRST116") {
+      // PGRST116 means no rows returned, which is expected if the user doesn't exist
+      throw checkError;
+    }
+
+    if (existingUser) {
+      // If user exists, update their details
+      const { data, error } = await supabase
+        .from("user")
+        .update({
           first_name,
           last_name,
           profile_image_url,
           user_id,
-        },
-      ])
-      .select();
+        })
+        .eq("email", email)
+        .select();
 
-    console.log("data", data);
-    console.log("error", error);
+      if (error) throw error;
+      return data;
+    } else {
+      // If user doesn't exist, create a new entry
+      const { data, error } = await supabase
+        .from("user")
+        .insert([
+          {
+            email,
+            first_name,
+            last_name,
+            profile_image_url,
+            user_id,
+          },
+        ])
+        .select();
 
-    if (error?.code) return error;
-    return data;
+      if (error) throw error;
+      return data;
+    }
   } catch (error: any) {
     throw new Error(error.message);
   }
