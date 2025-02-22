@@ -1,6 +1,7 @@
 // app/api/database/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import {supabaseClient} from '@/lib/supabaseClient';
+import { supabaseClient } from '@/lib/supabaseClient';
+import { getDbConnectionDetails, setDbConnectionDetails } from '@/lib/dbCache';
 import { connectToPostgres, listPostgresTables, connectToMySQL, listMySQLTables, connectToMongoDB, listMongoDBCollections } from '@/utils/databaseUtils';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -10,17 +11,26 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
   }
 
-  const { data, error } = await supabaseClient
-    .from('database_connections')
-    .select('database_type, host, database_name, username, password')
-    .eq('id', id)
-    .single();
+  // Check if the connection details are already cached
+  let connectionDetails = getDbConnectionDetails(id);
+  console.log("connectionDetails", connectionDetails); 
+  if (!connectionDetails) {
+    const { data, error } = await supabaseClient
+      .from('database_connections')
+      .select('database_type, host, database_name, username, password')
+      .eq('id', id)
+      .single();
 
-  if (error) {
-    return NextResponse.json({ error: 'Error fetching database details' }, { status: 500 });
+    if (error) {
+      return NextResponse.json({ error: 'Error fetching database details' }, { status: 500 });
+    }
+
+    connectionDetails = data;
+    // Cache the connection details
+    setDbConnectionDetails(id, connectionDetails);
   }
 
-  const { database_type, host, database_name, username, password } = data;
+  const { database_type, host, database_name, username, password } = connectionDetails;
 
   try {
     let tables: string[] = [];

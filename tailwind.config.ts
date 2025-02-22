@@ -1,12 +1,11 @@
-import type { Config } from "tailwindcss";
 
+import type {Config} from 'tailwindcss'
 const svgToDataUri = require("mini-svg-data-uri");
-
 const colors = require("tailwindcss/colors");
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
-import { nextui } from "@nextui-org/react";
+import { heroui } from "@heroui/react";
 
 const config: Config = {
   // Merging the content arrays and removing duplicates
@@ -15,7 +14,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{ts,tsx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   // Enabling dark mode
   darkMode: "class", // Assuming you want to enable dark mode based on the class strategy
@@ -77,6 +76,15 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        spinner: {
+          '0%': { opacity: '1' },
+          '10%': { opacity: '0.7' },
+          '20%': { opacity: '0.3' },
+          '35%': { opacity: '0.2' },
+          '50%': { opacity: '0.1' },
+          '75%': { opacity: '0.05' },
+          '100%': { opacity: '0' },
+        },
         "background-shine": {
           from: {
             backgroundPosition: "0 0",
@@ -142,6 +150,7 @@ const config: Config = {
         },
       },
       animation: {
+        spinner: 'spinner 1s linear infinite',
         "logo-cloud": "logo-cloud 30s linear infinite", // Adjust duration and timing as needed for your design.
         orbit: "orbit calc(var(--duration)*1s) linear infinite",
         gradient: "gradient 8s linear infinite",
@@ -156,7 +165,19 @@ const config: Config = {
   },
   // Merging plugins, adding any unique plugins from both files
   plugins: [
-    nextui(),
+    heroui({
+      themes: {
+        dark: {
+          colors: {
+            primary: {
+              DEFAULT: "#BEF264",
+              foreground: "#000000",
+            },
+            focus: "#BEF264",
+          },
+        },
+      },
+    }),
     require("tailwindcss-animate"), // Assuming require is resolved in your environment
     // Add other unique plugins here
     function ({ matchUtilities, theme }: any) {

@@ -66,8 +66,8 @@ export async function listMySQLColumns(connection: mysql.Connection, tableName: 
   return (rows as any[]).map((row: any) => row.Field);
 }
 
-export async function queryMySQLTable(connection: mysql.Connection, tableName: string): Promise<{ columns: string[], rows: any }> {
-  const [rows, fields] = await connection.execute(`SELECT * FROM \`${tableName}\` LIMIT 100`);
+export async function queryMySQLTable(connection: mysql.Connection, query: string): Promise<{ columns: string[], rows: any }> {
+  const [rows, fields] = await connection.execute(query);
   const columns = fields.map((field: any) => field.name);
   return { columns, rows };
 }
@@ -95,7 +95,7 @@ export async function listMongoDBColumns(db: any, collectionName: string): Promi
   return sampleDoc ? Object.keys(sampleDoc) : [];
 }
 
-export async function queryMongoDBCollection(db: any, collectionName: string): Promise<any[]> {
+export async function queryMongoDBCollection(db: any, collectionName: string, queryOptions?: { where: string | null; groupBy: string | null; orderBy: string | null; orderDirection: string | null; limit: number; }): Promise<any[]> {
   const collection = db.collection(collectionName);
   const documents = await collection.find().limit(100).toArray();
   return documents;
@@ -108,4 +108,34 @@ export async function executeMongoDBQuery(db: any, query: string): Promise<any[]
   const collection = db.collection(collectionName);
   const documents = await collection.find(findParams).limit(100).toArray();
   return documents;
+}
+interface QueryResult {
+  columns: string[];
+  rows: any[];
+}
+
+export async function executeDatasetQuery(connection: any, query: string, dbType: 'postgres' | 'mysql' | 'mongodb'): Promise<QueryResult> {
+  switch (dbType) {
+    case 'postgres': {
+      const res = await connection.query(query);
+      const columns = res.fields.map((field: any) => field.name);
+      const rows = res.rows;
+      return { columns, rows };
+    }
+    case 'mysql': {
+      const [rows, fields] = await connection.execute(query);
+      const columns = fields.map((field: any) => field.name);
+      return { columns, rows };
+    }
+    case 'mongodb': {
+      const { collectionName, findParams } = JSON.parse(query);
+      const collection = connection.collection(collectionName);
+      const documents = await collection.find(findParams).limit(100).toArray();
+      const columns = documents.length > 0 ? Object.keys(documents[0]) : [];
+      return { columns, rows: documents };
+    }
+    default: {
+      throw new Error(`Unsupported database type: ${dbType}`);
+    }
+  }
 }

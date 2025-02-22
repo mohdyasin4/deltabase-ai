@@ -11,7 +11,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Dashboards',
-    href: '/dashboard/userDash',
+    href: '/dashboard/my-dashboards',
     icon: 'dashboard',
     label: 'Databases',
     separator: true,
@@ -24,7 +24,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Settings',
-    href: '/settings',
+    href: '/dashboard/settings',
     icon: 'settings',
     label: 'settings',
     bottom: true

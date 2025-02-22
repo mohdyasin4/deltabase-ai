@@ -1,4 +1,5 @@
 import { Icons } from '@/components/icons';
+import { type ClientUploadedFileData } from "uploadthing/types"
 
 export interface NavItem {
   [x: string]: unknown;
@@ -39,4 +40,8 @@ export interface RowData {
   name: string;
   email: string;
   age: number;
+}
+
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {
+  path: any;
 }

@@ -1,24 +1,24 @@
-import { Computer, Network } from 'lucide-react'
-import { FaBusinessTime } from 'react-icons/fa'
+import { Database, ChartBar, Users } from 'lucide-react' // Importing new icons suitable for Deltabase
+import { FaChartLine } from 'react-icons/fa'
 import { OrbitingCirclesComponent } from './orbiting-circles'
 import { TITLE_TAILWIND_CLASS } from '@/utils/constants'
 
 const features = [
   {
-    name: 'Build faster.',
+    name: 'Dynamic Data Visualization.',
     description:
-      'Get up and running in no time with pre-configured settings and best practices. Say goodbye to setup and focus on what truly matters - building your application.',
-    icon: Computer,
+      'Transform your data into interactive and insightful visualizations effortlessly. Deltabase allows you to create customizable charts and dashboards that highlight key metrics.',
+    icon: ChartBar,
   },
   {
-    name: 'Focus on business logic.',
-    description: 'Concentrate on solving business problems instead of dealing with the repetitive setup.',
-    icon: FaBusinessTime,
+    name: 'AI-Powered Insights.',
+    description: 'Utilize AI to generate SQL query suggestions and enhance your data analysis workflow, helping you derive meaningful insights faster.',
+    icon: FaChartLine,
   },
   {
-    name: 'Ready for scale.',
-    description: 'Prepare for growth from day one. With built-in optimizations and scalable architecture, your application will be ready to handle increased traffic and complexity.',
-    icon: Network,
+    name: 'Multi-Database Support.',
+    description: 'Connect to various databases seamlessly. Deltabase supports MySQL, PostgreSQL, MongoDB, CSV, API and more, enabling you to manage all your data sources in one place.',
+    icon: Database,
   },
 ]
 
@@ -30,10 +30,10 @@ export default function SideBySide() {
           <div className="lg:pr-8 lg:pt-4">
             <div className="lg:max-w-lg">
               <p className={`${TITLE_TAILWIND_CLASS} mt-2 font-semibold tracking-tight dark:text-white text-gray-900`}>
-                Nextjs Starter Kit: A faster way to production
+                Deltabase: Your Data, Visualized
               </p>
               <p className="mt-6 leading-8 text-gray-600 dark:text-gray-400">
-                Accelerate your development with this powerful Nextjs Starter Kit
+                Unlock the power of your data with Deltabase's robust data visualization and analytics tools.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (

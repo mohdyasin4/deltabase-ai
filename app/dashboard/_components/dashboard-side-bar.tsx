@@ -26,8 +26,7 @@ export default function DashboardSideBar({ className }: SidebarProps) {
   return (
     <nav
       className={cn(
-        'absolute bg-background h-screen flex-none border-r z-30 pt-3 md:block transition-all duration-600 flex flex-col',
-        isExpanded ? 'w-60' : 'w-14',
+        'absolute bg-background h-screen flex-none border-r w-14 z-30 pt-3 md:block transition-all duration-600 flex flex-col',
         className
       )}
       onMouseEnter={handleMouseEnter}
@@ -45,7 +44,7 @@ export default function DashboardSideBar({ className }: SidebarProps) {
         </Link>
       </div>
       <div className="flex-grow py-2">
-        <div className="p-2 h-[calc(100vh-5vh)] ">
+        <div className="flex items-center justify-center py-2 h-[calc(100vh-5vh)] ">
             <DashboardNav items={navItems} isExpanded={isExpanded} />
         </div>
       </div>

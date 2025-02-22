@@ -26,7 +26,7 @@ export const userUpdate = async ({
 
   try {
     const { data, error } = await supabase
-      .from("user")
+      .from("users")
       .update([
         {
           email,

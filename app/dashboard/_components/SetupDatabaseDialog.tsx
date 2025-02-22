@@ -9,17 +9,20 @@ import DatabaseDetailsForm from "@/components/form/DbDetailsForm"; // Adjust pat
 import { supabaseClient } from "@/lib/supabaseClient";
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/nextjs"; // Use this to access the current user
+import { Button } from "@/components/ui/button";
 
 interface SetupDatabaseDialogProps {
   onClose: () => void;
   setData: (data: any) => void;
   getData: () => Promise<any[]>;
+  setSelectedOption: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const SetupDatabaseDialog: React.FC<SetupDatabaseDialogProps> = ({
   onClose,
   setData,
   getData,
+  setSelectedOption,
 }) => {
   const {
     connectionName,
@@ -38,7 +41,7 @@ const SetupDatabaseDialog: React.FC<SetupDatabaseDialogProps> = ({
   } = useDatabaseStore();
 
   const { user } = useUser();
-  
+
   const handleSubmit = async (formData: any) => {
     console.log("handleSubmit Invoked");
     console.log("Form data:", formData);
@@ -69,6 +72,7 @@ const SetupDatabaseDialog: React.FC<SetupDatabaseDialogProps> = ({
       toast.success("Database connection added successfully");
     }
 
+    // Re-fetch data and update the state
     const newData = await getData();
     setData(newData);
     onClose();
@@ -76,12 +80,15 @@ const SetupDatabaseDialog: React.FC<SetupDatabaseDialogProps> = ({
   };
 
   return (
-    <DialogContent>
+    <div>
       <DialogHeader>
-        <DialogTitle>Setup New Database Connection</DialogTitle>
+        <DialogTitle>New Database</DialogTitle>
       </DialogHeader>
       <DatabaseDetailsForm onSubmit={handleSubmit} />
-    </DialogContent>
+      <Button type="button" onClick={() => setSelectedOption(null)} className="w-full mt-2 font-semibold" variant="outline">
+        Back
+      </Button>
+    </div>
   );
 };
 

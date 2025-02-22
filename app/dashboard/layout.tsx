@@ -63,7 +63,7 @@ export default function DashboardLayout({
             }}
           />
           {/* <DashboardTopNav id={id}/> */}
-          <div className="mt-12">{children}</div>
+          <div className="mt-12 h-full ">{children}</div>
         </main>
       </div>
     </TooltipProvider>

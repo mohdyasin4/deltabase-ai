@@ -28,7 +28,7 @@ export const userCreate = async ({
   try {
     // First, check if a user with this email already exists
     const { data: existingUser, error: checkError } = await supabase
-      .from("user")
+      .from("users")
       .select("*")
       .eq("email", email)
       .single();
@@ -41,7 +41,7 @@ export const userCreate = async ({
     if (existingUser) {
       // If user exists, update their details
       const { data, error } = await supabase
-        .from("user")
+        .from("users")
         .update({
           first_name,
           last_name,
@@ -56,7 +56,7 @@ export const userCreate = async ({
     } else {
       // If user doesn't exist, create a new entry
       const { data, error } = await supabase
-        .from("user")
+        .from("users")
         .insert([
           {
             email,

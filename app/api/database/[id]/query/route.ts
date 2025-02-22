@@ -1,3 +1,4 @@
+//app/api/database/[id]/query/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseClient } from '@/lib/supabaseClient';
 import {
@@ -8,32 +9,47 @@ import {
   connectToMongoDB,
   executeMongoDBQuery,
 } from '@/utils/databaseUtils';
+import { getDbConnectionDetails, setDbConnectionDetails } from '@/lib/dbCache';
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;
   const { query } = await req.json();
+  const { clause, column } = query;
 
   if (!id || !query) {
     console.error("Invalid ID or query");
     return NextResponse.json({ error: 'Invalid ID or query' }, { status: 400 });
   }
 
-  const { data, error } = await supabaseClient
-    .from('database_connections')
-    .select('database_type, host, database_name, username, password')
-    .eq('id', id)
-    .single();
+  // Check the cache for existing connection details
+  let connectionDetails = getDbConnectionDetails(id);
+  console.log("connectionDetails", connectionDetails);  
+  if (!connectionDetails) {
+    // Fetch connection details from Supabase if not found in the cache
+    const { data, error } = await supabaseClient
+      .from('database_connections')
+      .select('database_type, host, database_name, username, password')
+      .eq('id', id)
+      .single();
 
-  if (error) {
-    console.error("Error fetching database details:", error);
-    return NextResponse.json({ error: 'Error fetching database details' }, { status: 500 });
+    if (error) {
+      console.error("Error fetching database details:", error);
+      return NextResponse.json({ error: 'Error fetching database details' }, { status: 500 });
+    }
+
+    connectionDetails = data;
+    // Store the details in the cache
+    setDbConnectionDetails(id, connectionDetails);
   }
 
-  const { database_type, host, database_name, username, password } = data;
+  const { database_type, host, database_name, username, password } = connectionDetails;
 
   // Check if the query contains a LIMIT clause
   const limitRegex = /\blimit\b/i;
   const defaultLimit = " LIMIT 100";
+
+
+  // Use sqlQuery instead of the original query
   const queryWithLimit = limitRegex.test(query) ? query : `${query}${defaultLimit}`;
 
   try {
@@ -70,7 +86,6 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   } catch (error) {
     console.error("Error executing the query:", error);
     
-    // Return the error message from the catch block
     return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

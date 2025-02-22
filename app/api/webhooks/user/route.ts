@@ -32,13 +32,13 @@ async function handler(request: NextRequest) {
     const { id, ...attributes } = evt.data;
 
     // Check if the user already exists
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.users.findUnique({
       where: { user_id: id as string },
     });
 
     if (!existingUser) {
       // If the user does not exist, create a new record
-      await prisma.user.create({
+      await prisma.users.create({
         data: {
           user_id: id as string,
           attributes,
@@ -46,7 +46,7 @@ async function handler(request: NextRequest) {
       });
     } else {
       // If the user exists, update their attributes
-      await prisma.user.update({
+      await prisma.users.update({
         where: { user_id: id as string },
         data: { attributes },
       });

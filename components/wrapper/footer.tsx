@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useForm } from 'react-hook-form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -11,88 +11,86 @@ export default function Footer() {
         reset,
     } = useForm();
 
-
     const onSubmit = async (data: any) => {
-
-
+        // Add your submission logic here, such as sending data to an API or handling user subscriptions.
+        console.log(data);
+        reset(); // Reset the form after submission
     };
+
     return (
         <footer className="border-t dark:bg-black">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
                 <div className="lg:grid lg:grid-cols-2">
                     <div
-                        className="border-b   py-8 lg:order-last lg:border-b-0 lg:border-s lg:py-16 lg:ps-16"
+                        className="border-b py-8 lg:order-last lg:border-b-0 lg:border-s lg:py-16 lg:ps-16"
                     >
                         <div className="mt-8 space-y-4 lg:mt-0">
-
                             <div>
-                                <h3 className="text-2xl font-medium">This is a fake newsletter title</h3>
-                                <p className="mt-4 max-w-lg  ">
-                                    This is not a real newsletter email input. This is for you to build upon
+                                <h3 className="text-2xl font-medium">Stay Updated with Deltabase</h3>
+                                <p className="mt-4 max-w-lg">
+                                    Sign up for our newsletter to receive the latest news, updates, and insights on data analytics and visualization.
                                 </p>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col border rounded-xl p-4 gap-3 mt-6 w-full">
                                 <Input
-                                    {...register('email', { required: true })}
+                                    {...register('email', { required: 'Email is required' })}
                                     placeholder="Enter your email"
                                     type="email"
+                                    className={`border ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                                 />
-                                <Button type="submit">
-                                    Sign Up
-                                </Button>
+                                {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
+                                <Button type="submit">Sign Up</Button>
                             </form>
                         </div>
                     </div>
 
                     <div className="py-8 lg:py-16 lg:pe-16">
-
-
                         <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
-
                             <div>
-                                <p className="font-medium ">Socials</p>
-
+                                <p className="font-medium">Connect with Us</p>
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <a href="https://twitter.com/rasmickyy" target="_blank" className="transition hover:opacity-75"> Twitter </a>
+                                        <a href="https://twitter.com/deltabase" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> Twitter </a>
                                     </li>
                                     <li>
-                                        <a href="https://www.youtube.com/@rasmic" target="_blank" className="  transition hover:opacity-75"> YouTube </a>
+                                        <a href="https://www.linkedin.com/company/deltabase" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> LinkedIn </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.youtube.com/channel/deltabase" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> YouTube </a>
                                     </li>
                                 </ul>
                             </div>
 
                             <div>
-                                <p className="font-medium ">Helpful Links</p>
-
+                                <p className="font-medium">Helpful Links</p>
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <a target="_blank" href="/" rel="noopener noreferrer" className="  transition hover:opacity-75"> Docs </a>
+                                        <a href="/docs" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> Documentation </a>
                                     </li>
                                     <li>
-                                        <a href="/" className="  transition hover:opacity-75"> Methodology </a>
+                                        <a href="/methodology" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> Methodology </a>
+                                    </li>
+                                    <li>
+                                        <a href="/blog" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> Blog </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
 
-                        <div className="mt-8 border-t   pt-8">
+                        <div className="mt-8 border-t pt-8">
                             <ul className="flex flex-wrap gap-4 text-xs">
                                 <li>
-                                    <a href="/" target="_blank" className="transition hover:opacity-75">Terms & Conditions </a>
+                                    <a href="/terms" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75">Terms & Conditions </a>
                                 </li>
-
                                 <li>
-                                    <a href="/" target="_blank" className="transition hover:opacity-75">Privacy Policy </a>
+                                    <a href="/privacy" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75">Privacy Policy </a>
                                 </li>
                             </ul>
-
-                            <p className="mt-8 text-xs  ">&copy; 2024. SomeCompany LLC. All rights reserved.</p>
+                            <p className="mt-8 text-xs">&copy; 2024. Deltabase LLC. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </footer>
-
-    )
+    );
 }

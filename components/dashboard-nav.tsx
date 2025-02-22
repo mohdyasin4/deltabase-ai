@@ -1,4 +1,3 @@
-// components/dashboard-nav.tsx
 "use client";
 
 import Link from "next/link";
@@ -8,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { NavItem } from "@/types";
 import { Profile } from "./Profile";
 import { Separator } from "./ui/separator";
+import { Tooltip } from "@heroui/react"; // Import tooltip components
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -28,45 +28,35 @@ export function DashboardNav({
 
   const topItems = items.filter((item) => !item.bottom);
   const bottomItems = items.filter((item) => item.bottom);
+
   const renderNavItem = (item: NavItem) => {
     const Icon = Icons[item.icon || "arrowRight"];
     if (item.title === "Account") {
       return <Profile isExpanded={isExpanded} />;
     }
     return (
-      <div key={item.href}>
-        {item.href && (
+      <Tooltip className="rounded-sm text-xs" color="warning" placement="right" key={item.href} content={item.title}>
           <Link
             href={item.disabled ? "/" : item.href}
             className={cn(
-              "flex items-center gap-1 rounded-[5px] py-2 text-sm text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground transition-all duration-300",
+              "flex items-center w-10 justify-center  gap-1 rounded-sm p-2 text-sm text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground transition-all duration-300",
               path === item.href ? "bg-accent text-foreground" : "transparent",
               item.disabled && "cursor-not-allowed opacity-80"
             )}
           >
-            <Icon className="mx-2 size-5" />
-            <span
-              className={cn(
-                "truncate",
-                isExpanded ? "opacity-100" : "opacity-0 hidden"
-              )}
-            >
-              {item.title}
-            </span>
+            <Icon className="size-5" />
           </Link>
-        )}
-        {item.divider && <Separator className="my-2" />}
-      </div>
+      </Tooltip>
     );
   };
 
   return (
     <div className="flex flex-col h-full w-full transition-all ease-in-out duration-100 justify-between">
-      <nav className="grid items-start gap-2">
+      <nav className="flex flex-col items-center gap-2">
         {topItems.map(renderNavItem)}
       </nav>
       <div className="mt-auto">
-        <nav className="grid items-start gap-2">
+        <nav className="flex flex-col items-center gap-2">
           {bottomItems.map(renderNavItem)}
         </nav>
       </div>

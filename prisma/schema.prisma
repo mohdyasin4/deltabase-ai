@@ -4,29 +4,109 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("SUPABASE_DATABASE_URL")
+  url      = env("NEXT_PUBLIC_SUPABASE_DATABASE_URL")
 }
 
-model User {
-  id          Int              @id @default(autoincrement())
-  user_id     String           @unique
-  attributes  Json
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt 
-  connections  database_connections[]
+model users {
+  id             Int                    @id @default(autoincrement())
+  user_id        String                 @unique
+  attributes     Json
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  connections    database_connections[]  // One-to-many relation to Database Connections
+  datasets       datasets[]             // One-to-many relation to Datasets
+  dashboards     dashboards[]           // One-to-many relation to Dashboards
+  api_connections api_connections[]     // One-to-many relation to API Connections
+  csvData        csvData[]              // One-to-many relation to CSV Data
+}
+
+model api_connections {
+  id                Int        @id @default(autoincrement())
+  connection_name   String
+  api_url           String
+  api_key           String?
+  headers           Json?
+  user_id           String      // Foreign key reference to User's user_id
+  created_at        DateTime    @default(now())
+  updated_at        DateTime    @default(now())
+
+  user              users       @relation(fields: [user_id], references: [user_id])
+  datasets          datasets[]   // One-to-many relation to Datasets
+}
+
+model csvData {
+  id              BigInt   @id @default(autoincrement())
+  user_id         String   // Foreign key reference to User's user_id
+  bucket_name     String?  // Nullable
+  file_name       String?  // Nullable
+  selectedFields   String[] // Array field to store selected fields from the CSV
+  createdat       DateTime @default(now())
+  updatedat       DateTime @default(now())
+  connection_name  String?  // Nullable
+
+  user            users    @relation(fields: [user_id], references: [user_id])
+}
+
+model dashboards {
+  id                Int                @id @default(autoincrement())
+  name              String
+  description       String?
+  user_id           String             // Foreign key reference to User's user_id
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  widget_details    Json               // Stores widget details in JSON format
+  layout            Json?              // Stores the layout (positions, sizes) of widgets
+  custom_settings   Json?              // Optional field to store any other custom settings
+  type              String?            // Nullable
+
+  user              users              @relation(fields: [user_id], references: [user_id])
 }
 
 model database_connections {
-  id                Int       @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   connection_name   String
   database_name     String
   database_type     String
   host              String
   username          String
   password          String
-  user_id           String    // Foreign key reference to User's externalId
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @default(now()) @updatedAt
+  user_id           String             // Foreign key reference to User's user_id
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @default(now())
 
-  user              User      @relation(fields: [user_id], references: [user_id])
+  user              users               @relation(fields: [user_id], references: [user_id])
+  datasets          datasets[]          // One-to-many relation to Datasets
+}
+
+model datasets {
+  id                  Int      @id @default(autoincrement())
+  dataset_name        String
+  dataset_description String?  // Nullable
+  sql_query           String
+  connection_id       Int?     // Nullable
+  user_id             String
+  visualization_type  String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  selectedField       String?  // Nullable
+  x_axis              String?  // Nullable
+  y_axis              String?  // Nullable
+  issample            Boolean? // Nullable
+  is_stacked          Boolean  @default(false)
+  api_id              Int?     // Nullable
+  csv_id              Int?     // Nullable
+  filters             Json?    // New column to store filter details
+  connection          database_connections? @relation(fields: [connection_id], references: [id], onDelete: Cascade)
+  user                users                 @relation(fields: [user_id], references: [user_id])
+  api_connections     api_connections?      @relation(fields: [api_id], references: [id], onDelete: Cascade)
+}
+
+model users_storage {
+  id          BigInt   @id @default(autoincrement())
+  user_id     String   // Foreign key reference to User's user_id
+  bucket_name String?  // Nullable
+  createdat   DateTime @default(now())
+  updatedat   DateTime @default(now())
+
+  user              users              @relation(fields: [user_id], references: [userId])
 }
