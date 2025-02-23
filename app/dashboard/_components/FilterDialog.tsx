@@ -171,6 +171,7 @@ const FilterDialog = forwardRef<any, FilterDialogProps>(
         });
       }
     }, [datasetId, type]);
+    
     const applyFilters = async (newFilters?: FilterRow[]) => {
       // Use newFilters if provided; otherwise fallback to the filters prop
       const filtersToUse = newFilters || filters;

@@ -27,7 +27,7 @@ interface AdvancedSettingsPanelProps {
   apiUrlLoading: boolean;
   handleApiUrlChange: (url: string) => void;
   renderVisualizationOptions: () => React.ReactNode;
-  renderVisualizationSettings: () => React.ReactNode;
+  RenderVisualizationSettings: () => React.ReactNode;
   showSummarizePanel: boolean;
   setShowSummarizePanel: (show: boolean) => void;
 }
@@ -50,7 +50,7 @@ export default function AdvancedSettingsPanel({
   apiUrlLoading,
   handleApiUrlChange,
   renderVisualizationOptions,
-  renderVisualizationSettings,
+  RenderVisualizationSettings,
 }: AdvancedSettingsPanelProps) {
   console.log("sqlQuery", sqlQuery);
     
@@ -188,7 +188,7 @@ export default function AdvancedSettingsPanel({
             </div>
           }
         >
-          <div className="p-4">{renderVisualizationSettings()}</div>
+          <div className="p-4">{RenderVisualizationSettings()}</div>
         </Tab>
       </Tabs>
     </div>

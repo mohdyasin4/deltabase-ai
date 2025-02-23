@@ -944,7 +944,7 @@ const transformFiltersToChips = (filters: FilterRow[]) => {
   };
 
   // Render settings for the selected visualization
-  const renderVisualizationSettings = () => {
+  const RenderVisualizationSettings = () => {
     // Set default values based on selected visualization
     useEffect(() => {
       const { autoXAxis, autoYAxis } = determineAxes();
@@ -1349,7 +1349,7 @@ const transformFiltersToChips = (filters: FilterRow[]) => {
                 apiUrlLoading={apiUrlLoading}
                 handleApiUrlChange={handleApiUrlChange}
                 renderVisualizationOptions={renderVisualizationOptions}
-                renderVisualizationSettings={renderVisualizationSettings}
+                RenderVisualizationSettings={RenderVisualizationSettings}
               />
               <SummarizePanel
                 showPanel={showSummarizePanel}
