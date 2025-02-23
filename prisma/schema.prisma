@@ -18,6 +18,7 @@ model users {
   dashboards     dashboards[]           // One-to-many relation to Dashboards
   api_connections api_connections[]     // One-to-many relation to API Connections
   csvData        csvData[]              // One-to-many relation to CSV Data
+  storage        users_storage[]        // One-to-many relation to Users Storage
 }
 
 model api_connections {
@@ -108,5 +109,5 @@ model users_storage {
   createdat   DateTime @default(now())
   updatedat   DateTime @default(now())
 
-  user              users              @relation(fields: [user_id], references: [userId])
+  user              users              @relation(fields: [user_id], references: [user_id])
 }
