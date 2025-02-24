@@ -19,8 +19,8 @@ export const isAuthorized = async (
   const cookieStore = cookies();
 
   const supabase = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_DATABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_SUPABASE_SERVICE_ROLE_KEY!,
     {
       cookies: {
         get(name: string) {
