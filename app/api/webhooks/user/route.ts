@@ -47,14 +47,11 @@ async function handler(request: NextRequest) {
     const { id, attributes } = evt.data;
 
     // ✅ Step 1: Insert/Update User in Supabase
-    const { error } = await supabaseClient.from("users").upsert(
-      {
-        user_id: id, // Clerk user ID
-        attributes: attributes, // JSON attributes object
-        role: "authenticated", // Assign role
-      },
-      { onConflict: "id" } // Ensure unique user
-    );
+    const { error } = await supabaseClient.from("users").insert({
+      user_id: id, // Clerk user ID
+      attributes: attributes, // JSON attributes object
+      role: "authenticated", // Assign role
+    });
 
     if (error) {
       console.error("Supabase Error:", error);
