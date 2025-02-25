@@ -6,10 +6,14 @@ import { Webhook, WebhookRequiredHeaders } from "svix";
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
 
-async function handler(request: NextRequest, response: NextResponse) {
+async function handler(request: NextRequest) {
+  if (request.method !== "POST") {
+    return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+  }
+
   const payload = await request.json();
   const headersList = headers();
-  
+
   console.log("Headers:", {
     "svix-id": headersList.get("svix-id"),
     "svix-timestamp": headersList.get("svix-timestamp"),
@@ -25,7 +29,7 @@ async function handler(request: NextRequest, response: NextResponse) {
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
   console.log("Payload:", payload);
-  
+
   try {
     evt = await wh.verify(
       JSON.stringify(payload),
@@ -33,9 +37,9 @@ async function handler(request: NextRequest, response: NextResponse) {
     ) as Event;
   } catch (err) {
     console.error("Webhook verification failed:", (err as Error).message);
-    return response.json({ error: "Signature verification failed" }, { status: 400 });
+    return NextResponse.json({ error: "Signature verification failed" }, { status: 400 });
   }
-  
+
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, ...attributes } = evt.data;
@@ -57,16 +61,16 @@ async function handler(request: NextRequest, response: NextResponse) {
         data: { attributes },
       });
     }
+
+    return NextResponse.json({ success: true, message: `User ${eventType} processed` }, { status: 200 });
   }
 
-  // ✅ Return a success response
-  return response.json({ success: true, message: "Webhook processed successfully" }, { status: 200 });
+  // ✅ Return response even if event type does not match
+  return NextResponse.json({ success: true, message: "Event received but not processed" }, { status: 200 });
 }
 
-// Export handlers
-export const GET = handler;
+// ✅ Only export POST handler
 export const POST = handler;
-export const PUT = handler;
 
 type EventType = "user.created" | "user.updated" | "*";
 
