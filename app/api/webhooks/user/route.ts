@@ -6,7 +6,7 @@ import { Webhook, WebhookRequiredHeaders } from "svix";
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
 
-async function handler(request: NextRequest) {
+async function handler(request: NextRequest, response: NextResponse) {
   const payload = await request.json();
   const headersList = headers();
   
@@ -33,7 +33,7 @@ async function handler(request: NextRequest) {
     ) as Event;
   } catch (err) {
     console.error("Webhook verification failed:", (err as Error).message);
-    return NextResponse.json({ error: "Signature verification failed" }, { status: 400 });
+    return response.json({ error: "Signature verification failed" }, { status: 400 });
   }
   
   const eventType: EventType = evt.type;
@@ -60,7 +60,7 @@ async function handler(request: NextRequest) {
   }
 
   // ✅ Return a success response
-  return NextResponse.json({ success: true, message: "Webhook processed successfully" }, { status: 200 });
+  return response.json({ success: true, message: "Webhook processed successfully" }, { status: 200 });
 }
 
 // Export handlers
