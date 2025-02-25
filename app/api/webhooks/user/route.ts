@@ -1,8 +1,15 @@
 import { prisma } from "@/lib/db";
+import { createClient } from "@supabase/supabase-js";
 import { IncomingHttpHeaders } from "http";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { Webhook, WebhookRequiredHeaders } from "svix";
+
+// Supabase Setup
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY! // Service Role Key for Admin Operations
+);
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
 
@@ -42,18 +49,31 @@ async function handler(request: NextRequest) {
 
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
-    const { id, ...attributes } = evt.data;
+    const { id, attributes } = evt.data;
 
+    // ✅ Step 1: Insert/Update User in Supabase
+    const { error } = await supabase.from("users").upsert(
+      {
+        id, // Clerk user ID
+        attributes, // JSON attributes object
+        role: "authenticated", // Assign role
+      },
+      { onConflict: ["id"] } // Ensure unique user
+    );
+
+    if (error) {
+      console.error("Supabase Error:", error);
+      return NextResponse.json({ error: "Failed to sync user to Supabase" }, { status: 500 });
+    }
+
+    // ✅ Step 2: Insert into Prisma (if needed)
     const existingUser = await prisma.users.findUnique({
       where: { user_id: id as string },
     });
 
     if (!existingUser) {
       await prisma.users.create({
-        data: {
-          user_id: id as string,
-          attributes,
-        },
+        data: { user_id: id as string, attributes },
       });
     } else {
       await prisma.users.update({
@@ -65,7 +85,6 @@ async function handler(request: NextRequest) {
     return NextResponse.json({ success: true, message: `User ${eventType} processed` }, { status: 200 });
   }
 
-  // ✅ Return response even if event type does not match
   return NextResponse.json({ success: true, message: "Event received but not processed" }, { status: 200 });
 }
 
@@ -75,7 +94,10 @@ export const POST = handler;
 type EventType = "user.created" | "user.updated" | "*";
 
 type Event = {
-  data: Record<string, string | number>;
+  data: {
+    id: string;
+    attributes: Record<string, any>;
+  };
   object: "event";
   type: EventType;
 };
