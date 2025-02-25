@@ -7,8 +7,8 @@ import { Webhook, WebhookRequiredHeaders } from "svix";
 
 // Supabase Setup
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // Service Role Key for Admin Operations
+  process.env.NEXT_PUBLIC_SUPABASE_DATABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_SUPABASE_SERVICE_ROLE_KEY! // Service Role Key for Admin Operations
 );
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
