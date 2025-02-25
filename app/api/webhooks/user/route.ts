@@ -9,6 +9,11 @@ const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
 async function handler(request: NextRequest) {
   const payload = await request.json();
   const headersList = headers();
+  console.log("Headers:", {
+    "svix-id": headersList.get("svix-id"),
+    "svix-timestamp": headersList.get("svix-timestamp"),
+    "svix-signature": headersList.get("svix-signature"),
+  });
   const heads = {
     "svix-id": headersList.get("svix-id"),
     "svix-timestamp": headersList.get("svix-timestamp"),
@@ -17,16 +22,17 @@ async function handler(request: NextRequest) {
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
   console.log("Payload:", payload);
-
+  
   try {
     evt = await wh.verify(
       JSON.stringify(payload),
       heads as unknown as IncomingHttpHeaders & WebhookRequiredHeaders
     ) as Event;
   } catch (err) {
-    console.error((err as Error).message);
-    return NextResponse.json({}, { status: 400 });
+    console.error("Webhook verification failed:", (err as Error).message);
+    return NextResponse.json({ error: "Signature verification failed" }, { status: 400 });
   }
+  
 
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {

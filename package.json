@@ -79,6 +79,7 @@
     "gridstack": "^10.3.1",
     "gridstack-react-wrapper": "^0.0.1",
     "html-react-parser": "^5.1.12",
+    "http": "^0.0.1-security",
     "is-arrayish": "^0.3.2",
     "lucide-react": "^0.436.0",
     "mini-svg-data-uri": "^1.4.4",
