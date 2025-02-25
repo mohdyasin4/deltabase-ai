@@ -55,7 +55,6 @@ async function handler(request: NextRequest) {
           data: {
             user_id: id as string,
             attributes,
-            role: "authenticated", // Assign default role
           },
         });
       } else {
