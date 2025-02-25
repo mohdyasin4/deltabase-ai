@@ -13,6 +13,7 @@ model users {
   id             Int                    @id @default(autoincrement())
   user_id        String                 @unique
   attributes     Json
+  role           String                 // New column for user role
   createdAt      DateTime               @default(now())
   updatedAt      DateTime               @updatedAt
   connections    database_connections[]  // One-to-many relation to Database Connections
