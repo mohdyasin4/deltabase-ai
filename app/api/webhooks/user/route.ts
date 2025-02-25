@@ -58,7 +58,7 @@ async function handler(request: NextRequest) {
         attributes, // JSON attributes object
         role: "authenticated", // Assign role
       },
-      { onConflict: ["id"] } // Ensure unique user
+      { onConflict: "id" } // Ensure unique user
     );
 
     if (error) {
