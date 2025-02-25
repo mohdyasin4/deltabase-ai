@@ -45,15 +45,26 @@ async function handler(request: NextRequest) {
     const { id, ...attributes } = evt.data;
 
     try {
-      await prisma.users.upsert({
+      const existingUser = await prisma.users.findUnique({
         where: { user_id: id as string },
-        update: { attributes },
-        create: {
-          user_id: id as string,
-          attributes,
-          role: "authenticated", // ✅ Set the default role
-        },
       });
+
+      if (!existingUser) {
+        // ✅ Create user with default role
+        await prisma.users.create({
+          data: {
+            user_id: id as string,
+            attributes,
+            role: "authenticated", // Assign default role
+          },
+        });
+      } else {
+        // ✅ Update existing user but keep the role unchanged
+        await prisma.users.update({
+          where: { user_id: id as string },
+          data: { attributes },
+        });
+      }
 
       return NextResponse.json(
         { success: true, message: `User ${eventType} processed` },
