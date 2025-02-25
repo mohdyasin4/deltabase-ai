@@ -14,7 +14,7 @@ export const userCreate = async ({
   const cookieStore = cookies();
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_DATABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_SUPABASE_SERVICE_ROLE_KEY!,
     {
       cookies: {
