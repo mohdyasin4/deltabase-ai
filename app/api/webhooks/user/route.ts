@@ -1,10 +1,8 @@
 import { prisma } from "@/lib/db";
-import { createClient } from "@supabase/supabase-js";
 import { IncomingHttpHeaders } from "http";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { Webhook, WebhookRequiredHeaders } from "svix";
-import { supabaseClient } from "@/lib/supabaseClient";
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
 
@@ -44,40 +42,33 @@ async function handler(request: NextRequest) {
 
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
-    const { id, attributes } = evt.data;
+    const { id, ...attributes } = evt.data;
 
-    // ✅ Step 1: Insert/Update User in Supabase
-    const { error } = await supabaseClient.from("users").insert({
-      user_id: id, // Clerk user ID
-      attributes: attributes, // JSON attributes object
-      role: "authenticated", // Assign role
-    });
-
-    if (error) {
-      console.error("Supabase Error:", error);
-      return NextResponse.json({ error: "Failed to sync user to Supabase" }, { status: 500 });
-    }
-
-    // ✅ Step 2: Insert into Prisma (if needed)
-    const existingUser = await prisma.users.findUnique({
-      where: { user_id: id as string },
-    });
-
-    if (!existingUser) {
-      await prisma.users.create({
-        data: { user_id: id as string, attributes },
-      });
-    } else {
-      await prisma.users.update({
+    try {
+      await prisma.users.upsert({
         where: { user_id: id as string },
-        data: { attributes },
+        update: { attributes },
+        create: {
+          user_id: id as string,
+          attributes,
+          role: "authenticated", // ✅ Set the default role
+        },
       });
-    }
 
-    return NextResponse.json({ success: true, message: `User ${eventType} processed` }, { status: 200 });
+      return NextResponse.json(
+        { success: true, message: `User ${eventType} processed` },
+        { status: 200 }
+      );
+    } catch (error) {
+      console.error("Database error:", error);
+      return NextResponse.json({ error: "Database error" }, { status: 500 });
+    }
   }
 
-  return NextResponse.json({ success: true, message: "Event received but not processed" }, { status: 200 });
+  return NextResponse.json(
+    { success: true, message: "Event received but not processed" },
+    { status: 200 }
+  );
 }
 
 // ✅ Only export POST handler
@@ -86,10 +77,7 @@ export const POST = handler;
 type EventType = "user.created" | "user.updated" | "*";
 
 type Event = {
-  data: {
-    id: string;
-    attributes: Record<string, any>;
-  };
+  data: Record<string, string | number>;
   object: "event";
   type: EventType;
 };
