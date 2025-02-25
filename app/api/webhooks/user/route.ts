@@ -16,6 +16,7 @@ async function handler(request: NextRequest) {
   };
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
+  console.log(payload);
 
   try {
     evt = await wh.verify(
