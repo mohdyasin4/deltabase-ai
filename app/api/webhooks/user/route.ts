@@ -4,12 +4,7 @@ import { IncomingHttpHeaders } from "http";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { Webhook, WebhookRequiredHeaders } from "svix";
-
-// Supabase Setup
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_SUPABASE_SERVICE_ROLE_KEY! // Service Role Key for Admin Operations
-);
+import { supabaseClient } from "@/lib/supabaseClient";
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
 
@@ -52,7 +47,7 @@ async function handler(request: NextRequest) {
     const { id, attributes } = evt.data;
 
     // ✅ Step 1: Insert/Update User in Supabase
-    const { error } = await supabase.from("users").upsert(
+    const { error } = await supabaseClient.from("users").upsert(
       {
         id, // Clerk user ID
         attributes, // JSON attributes object
