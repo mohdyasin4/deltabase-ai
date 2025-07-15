@@ -13,7 +13,7 @@ import {
   Users
 } from 'lucide-react';
 
-const DeltabaseFeaturesData = [
+const RefractFeaturesData = [
   {
     id: 1,
     name: 'AI-Powered Query Assistance',
@@ -72,19 +72,19 @@ const DeltabaseFeaturesData = [
   },
 ];
 
-const DeltabaseFeaturesComponent = () => {
+const RefractFeaturesComponent = () => {
   return (
     <div className="flex flex-col justify-center items-center lg:w-[75%]">
       <div className="flex flex-col mb-[3rem]">
         <h2 className={`${TITLE_TAILWIND_CLASS} mt-2 font-semibold tracking-tight dark:text-white text-gray-900`}>
-          Deltabase: Your AI-Powered Business Intelligence Platform
+          Refract: Your AI-Powered Business Intelligence Platform
         </h2>
         <p className="mx-auto max-w-[500px] text-gray-600 dark:text-gray-400 text-center mt-2">
           Unlock insights from your data with the most advanced features, powered by AI and tailored for multi-database support.
         </p>
       </div>
       <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {DeltabaseFeaturesData.map((feature) => {
+        {RefractFeaturesData.map((feature) => {
           const Icon = feature.icon;
           return (
             <motion.div
@@ -115,4 +115,4 @@ const DeltabaseFeaturesComponent = () => {
   );
 };
 
-export default DeltabaseFeaturesComponent;
+export default RefractFeaturesComponent;

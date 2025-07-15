@@ -27,8 +27,8 @@ export default function SignUpPage() {
         <div className="absolute w-full flex justify-between p-6 items-center">
         <Link href="/">
           <Image
-            src="/images/wlogo.svg"
-            alt="Deltabase"
+            src="/images/refractlogo/whitelogo.svg"
+            alt="Refract"
             width={135}
             height={135}
           />

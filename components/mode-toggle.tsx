@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Monitor } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export default function ModeToggle() {
     const { theme, setTheme } = useTheme();
@@ -19,18 +19,38 @@ export default function ModeToggle() {
     }
 
     return (
-        <div>
-            {theme === "dark" ? (
-                <Button variant="ghost" className="hover:bg-inherit border-zinc-900 bg-[#0c0c0d]" size="icon" onClick={() => setTheme("light")}>
-                    <Sun className="w-5 h-5" />
-                    <span className="sr-only">Toggle theme</span>
-                </Button>
-            ) : (
-                <Button variant="ghost" size="icon" className="hover:bg-inherit border-zinc-100 bg-inherit" onClick={() => setTheme("dark")}>
-                    <Moon className="w-5 h-5" />
-                    <span className="sr-only">Toggle theme</span>
-                </Button>
-            )}
-        </div>
+        <ToggleGroup
+            type="single"
+            value={theme || "system"}
+            onValueChange={(value) => {
+                if (value) setTheme(value);
+            }}
+            className="rounded-lg border border-border/50 p-1 bg-muted/30"
+        >
+            <ToggleGroupItem
+                value="light"
+                aria-label="Light theme"
+                className="data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm h-8 px-3 text-xs font-medium transition-all hover:bg-background/50"
+            >
+                <Sun className="h-3.5 w-3.5 mr-1.5" />
+                Light
+            </ToggleGroupItem>
+            <ToggleGroupItem
+                value="dark"
+                aria-label="Dark theme"
+                className="data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm h-8 px-3 text-xs font-medium transition-all hover:bg-background/50"
+            >
+                <Moon className="h-3.5 w-3.5 mr-1.5" />
+                Dark
+            </ToggleGroupItem>
+            <ToggleGroupItem
+                value="system"
+                aria-label="System theme"
+                className="data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm h-8 px-3 text-xs font-medium transition-all hover:bg-background/50"
+            >
+                <Monitor className="h-3.5 w-3.5 mr-1.5" />
+                System
+            </ToggleGroupItem>
+        </ToggleGroup>
     );
 }

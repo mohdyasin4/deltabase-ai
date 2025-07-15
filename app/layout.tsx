@@ -7,31 +7,31 @@ import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
-
+import { Toaster as Sonner } from "sonner";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://deltabase.vercel.app"),
+  metadataBase: new URL("https://Refract.vercel.app"),
   title: {
     default:
-      "Deltabase - AI-Powered Business Intelligence & Data Visualization",
-    template: `%s | Deltabase`,
+      "Refract - AI-Powered Business Intelligence & Data Visualization",
+    template: `%s | Refract`,
   },
   description:
-    "Deltabase: The AI-Powered Business Intelligence and Data Visualization Tool for seamless insights and analysis.",
+    "Refract: The AI-Powered Business Intelligence and Data Visualization Tool for seamless insights and analysis.",
   openGraph: {
     description:
-      "Deltabase: The AI-Powered Business Intelligence and Data Visualization Tool for seamless insights and analysis.",
+      "Refract: The AI-Powered Business Intelligence and Data Visualization Tool for seamless insights and analysis.",
     images: ["https://yourdomain.com/path-to-image.png"],
-    url: "https://deltabase.vercel.app/",
+    url: "https://Refract.vercel.app/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Deltabase - AI-Powered Business Intelligence & Data Visualization",
+    title: "Refract - AI-Powered Business Intelligence & Data Visualization",
     description:
-      "Deltabase: The AI-Powered Business Intelligence and Data Visualization Tool for seamless insights and analysis.",
+      "Refract: The AI-Powered Business Intelligence and Data Visualization Tool for seamless insights and analysis.",
     siteId: "",
     creator: "@https://x.com/MohdYasin04",
     creatorId: "",
@@ -54,11 +54,9 @@ export default function RootLayout({
             as="image"
           />
           <link
-            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-
-awesome.min.css"
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
             rel="stylesheet"
-            integrity="sha384-
-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+            integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
           />
           <link
             rel="preload"

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/deltabase-ai.iml" filepath="$PROJECT_DIR$/.idea/deltabase-ai.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Refract-ai.iml" filepath="$PROJECT_DIR$/.idea/Refract-ai.iml" />
     </modules>
   </component>
 </project>

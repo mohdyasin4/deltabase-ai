@@ -15,7 +15,7 @@ interface SetupDatabaseDialogProps {
   onClose: () => void;
   setData: (data: any) => void;
   getData: () => Promise<any[]>;
-  setSelectedOption: React.Dispatch<React.SetStateAction<any>>;
+  setSelectedOption: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const SetupDatabaseDialog: React.FC<SetupDatabaseDialogProps> = ({

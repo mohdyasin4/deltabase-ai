@@ -61,10 +61,11 @@ const SaveDialog: React.FC<SaveDialogProps> = ({
             />
           </div>
           <DialogFooter>
-            <Button onClick={saveDataset}>Save</Button>
-            <Button variant="ghost" onClick={handleClose}>
+            
+          <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
+            <Button onClick={saveDataset}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

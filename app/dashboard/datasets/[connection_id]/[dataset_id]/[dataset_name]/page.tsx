@@ -52,9 +52,9 @@ const DatasetPage = () => {
   }
 
   return (
-    <div className="relative h-[calc(100vh-20vh)]">
+    <div>
       <ResultPage
-        connection_id={sourceType === "database" ? connection_id : null}
+        connectionId={sourceType === "database" ? connection_id : null}
         apiId={sourceType === "api" ? connection_id : null}
         dataset_id={dataset_id}
         csvId={sourceType === "csv" ? connection_id : null}

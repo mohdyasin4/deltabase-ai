@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   Card,
   CardContent,
@@ -9,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Icon } from "@iconify-icon/react";
-import { EllipsisVertical, LayoutDashboard } from "lucide-react";
+import { EllipsisVertical, BarChart3, ArrowRight } from "lucide-react";
 import {
   Button,
   Dropdown,
@@ -61,62 +62,65 @@ export default function DashboardCard({
       console.error("Error deleting dashboard:", error);
     }
   };
-
   return (
-    <Card className="relative flex flex-col items-start p-4 gap-2 hover:bg-white/10 transition-all ease-linear duration-100 hover:scale-105">
-      <div className="flex justify-between items-start w-full">
-        <div className="flex items-start gap-2 w-full">
-          {/* Icon */}
-          <LayoutDashboard 
-            className="w-8 h-8"
-            style={{ minWidth: "32px", minHeight: "32px" }}
-          />
-          {/* Title and Date */}
-          <div className="flex-grow">
+    <Card className="relative flex flex-col w-full group p-3 shadow-sm hover:shadow-xl border border-border/50 hover:border-border/80 gap-3 cursor-pointer bg-card hover:bg-accent/20 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden rounded-xl">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="relative flex items-start justify-between w-full gap-3">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="relative flex-shrink-0 p-2.5 rounded-xl bg-yellow-50 dark:bg-yellow-950/30 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-900/50 transition-all duration-300 group-hover:scale-110">
+            {/* Subtle glow effect */}
+            <div className="absolute inset-0 rounded-xl blur-sm opacity-0 group-hover:opacity-30 transition-opacity duration-300 bg-yellow-400" />
+            <BarChart3 
+              size={20}
+              className="relative text-yellow-600 dark:text-yellow-400 group-hover:text-yellow-700 dark:group-hover:text-yellow-300 transition-colors"
+            />
+          </div>
+          <div className="min-w-0 flex-1 space-y-0.5">
             <Link
               href={`/dashboard/my-dashboards/${dashboard.id}?name=${encodeURIComponent(
                 dashboard.name
               )}`}
-              className="hover:text-[#ffcc19] transition-all ease-in-out duration-200"
+              className="hover:text-primary transition-all ease-in-out duration-200"
             >
-              <CardTitle className="cursor-pointer">{dashboard.name}</CardTitle>
-              <CardDescription>
+              <CardTitle className="cursor-pointer text-base font-semibold truncate leading-tight text-foreground group-hover:text-foreground/90 transition-colors">{dashboard.name}</CardTitle>
+              <CardDescription className="text-xs text-muted-foreground opacity-60 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1">
                 Created on {new Date(dashboard.createdAt).toLocaleDateString()}
+                <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1" />
               </CardDescription>
             </Link>
           </div>
-
-          {/* Dropdown */}
-          <div className="ml-auto" onClick={handleDropdownClick}>
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  className="p-0 text-sm"
-                  disabled={isDeleting} // Disable button while deleting
-                >
-                  <EllipsisVertical />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu variant="faded" aria-label="Dashboard options">
-                <DropdownItem key="edit" shortcut="⌘⇧E">
-                  Edit Dashboard
-                </DropdownItem>
-                <DropdownItem
-                  key="delete"
-                  className="text-danger"
-                  color="danger"
-                  onClick={handleDelete} // Trigger delete on click
-                  shortcut="⌘⇧D"
-                >
-                  {isDeleting ? "Deleting..." : "Delete Dashboard"}
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
         </div>
+
+        {/* Dropdown - Enhanced design */}
+        <div className="hidden group-hover:block relative flex-shrink-0" onClick={handleDropdownClick}>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                className="p-0 text-sm hover:bg-accent/50 transition-colors"
+                disabled={isDeleting}
+              >
+                <EllipsisVertical size={16} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu variant="faded" aria-label="Dashboard options">
+              <DropdownItem key="edit" shortcut="⌘⇧E">
+                Edit Dashboard
+              </DropdownItem>
+              <DropdownItem
+                key="delete"
+                className="text-danger"
+                color="danger"
+                onClick={handleDelete}
+                shortcut="⌘⇧D"
+              >
+                {isDeleting ? "Deleting..." : "Delete Dashboard"}
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>        </div>
       </div>
     </Card>
   );

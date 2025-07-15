@@ -1,0 +1,1793 @@
+/* Professional Dashboard Grid Styles */
+
+/* Simple Grid Pattern Background - Solid Colors */
+.bg-grid-pattern {
+  background-color: rgba(0, 0, 0, 0.02);
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-dot-pattern {
+  background-color: rgba(0, 0, 0, 0.02);
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Enhanced Full-Screen Widget Zone with Solid Colors */
+.full-screen-widget-zone {
+  position: absolute; /* Changed to absolute to follow container scrolling */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--primary), 0.06);
+  pointer-events: auto;
+  z-index: 5;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.full-screen-widget-zone:hover {
+  opacity: 1;
+  background-color: rgba(var(--primary), 0.08);
+}
+
+.full-screen-widget-zone::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 2px dashed rgba(var(--primary), 0.6);
+  border-radius: 12px;
+  background-color: rgba(var(--primary), 0.12);
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 0 1px rgba(var(--background), 0.8);
+}
+
+.full-screen-widget-zone:hover::before {
+  border-color: rgba(var(--primary), 0.8);
+  background-color: rgba(var(--primary), 0.18);
+  transform: scale(1.002);
+}
+
+/* Light mode specific improvements - Solid Colors */
+@media (prefers-color-scheme: light) {
+  .full-screen-widget-zone {
+    background-color: rgba(var(--primary), 0.08);
+    min-height: 100vh;
+  }
+  
+  .full-screen-widget-zone:hover {
+    background-color: rgba(var(--primary), 0.12);
+  }
+  
+  .full-screen-widget-zone::before {
+    border: 2px dashed rgba(var(--primary), 0.8);
+    background-color: rgba(var(--primary), 0.18);
+    box-shadow: 
+      inset 0 0 0 1px rgba(var(--background), 0.9),
+      0 2px 8px rgba(var(--primary), 0.1);
+  }
+  
+  .full-screen-widget-zone:hover::before {
+    border-color: rgba(var(--primary), 1);
+    background-color: rgba(var(--primary), 0.25);
+  }
+}
+
+/* Enhanced Light Mode Visibility for Grid Patterns - Solid Colors */
+@media (prefers-color-scheme: light) {
+  .bg-grid-pattern {
+    background-color: rgba(0, 0, 0, 0.03);
+    background-image: 
+      linear-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
+  }
+
+  .bg-dot-pattern {
+    background-color: rgba(0, 0, 0, 0.03);
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+  }
+
+  /* Enhanced edit mode grid for light mode */
+  .edit-mode-grid::before {
+    background-color: rgba(var(--primary), 0.04);
+    background-image: 
+      linear-gradient(90deg, rgba(var(--primary), 0.08) 1px, transparent 1px),
+      linear-gradient(rgba(var(--primary), 0.08) 1px, transparent 1px);
+    border: 1px dashed rgba(var(--primary), 0.3);
+  }
+  /* Enhanced grid visual helpers for light mode */
+  .edit-mode-grid::after {
+    background-color: rgba(var(--primary), 0.03);
+    background-image: 
+      radial-gradient(circle at 24px 24px, rgba(var(--primary), 0.1) 1px, transparent 1px);
+  }
+
+  /* Improved widget hover effects in light mode */
+  .edit-mode-grid .widget-container::before {
+    background-color: rgba(var(--primary), 0.12);
+  }
+
+  .edit-mode-grid .widget-container:hover::before {
+    opacity: 0.8;
+  }
+}
+
+/* Clean Edit Mode */
+.edit-mode-grid {
+  position: relative;
+}
+
+.edit-mode-grid::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  background-color: rgba(var(--primary), 0.02);
+  background-image: 
+    linear-gradient(90deg, rgba(var(--primary), 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(var(--primary), 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border: 1px dashed rgba(var(--primary), 0.15);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: -1;
+  animation: grid-glow 3s ease-in-out infinite;
+}
+
+@keyframes grid-glow {
+  0% { 
+    background-size: 24px 24px;
+    opacity: 0.6;
+  }
+  100% { 
+    background-size: 25px 25px;
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced Edit Mode Visual Feedback */
+.edit-mode-grid .react-grid-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+}
+
+.edit-mode-grid .react-grid-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.edit-mode-grid .react-grid-item.react-draggable-dragging {
+  z-index: 1000;
+  transform: rotate(2deg) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.edit-mode-grid .react-grid-item.react-resizable-resizing {
+  z-index: 999;
+  box-shadow: 0 12px 30px rgba(var(--primary), 0.2);
+  transform: scale(1.02);
+  transition: none;
+}
+
+.edit-mode-grid .react-grid-item.react-resizable-resizing .widget-card {
+  border-color: rgba(var(--primary), 0.4);
+  background: rgba(var(--background), 0.98);
+  backdrop-filter: blur(12px);
+}
+
+.edit-mode-grid .react-grid-item.react-resizable-resizing .drag-handle {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.edit-mode-grid .react-grid-item.react-resizable-resizing:hover {
+  opacity: 1;
+  background-size: 42px 42px;
+}
+
+.edit-mode-grid .react-grid-item.react-resizable-resizing::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background-color: rgba(var(--primary), 0.08);
+  border: 2px solid rgba(var(--primary), 0.3);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: -1;
+  animation: hover-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes hover-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: scale(1.02);
+    opacity: 0.8;
+  }
+}
+
+/* Widget Card Enhancements in Edit Mode */
+.edit-mode-grid .widget-container {
+  position: relative;
+}
+
+.edit-mode-grid .widget-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-color: rgba(var(--primary), 0.08);
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.edit-mode-grid .widget-container:hover::before {
+  opacity: 1;
+}
+
+/* Drag Handle Styles */
+.drag-handle {
+  cursor: move;
+  transition: all 0.2s ease;
+}
+
+.drag-handle:hover {
+  opacity: 0.8;
+}
+
+/* Modern Resize Handle Base Styles */
+.react-resizable-handle {
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: none;
+  z-index: 10;
+}
+
+.react-grid-item:hover .react-resizable-handle {
+  opacity: 1;
+}
+
+.react-resizable-handle-se {
+  bottom: -10px;
+  right: -10px;
+  cursor: se-resize;
+  width: 20px;
+  height: 20px;
+}
+
+.react-resizable-handle-se::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(var(--primary), 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.react-resizable-handle-se::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background: 
+    linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.4) 32%, transparent 32%),
+    linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.4) 32%, transparent 32%);
+  background-size: 4px 4px;
+  border-radius: 3px;
+  opacity: 0.8;
+}
+
+/* Add Widget Zone Animations with Enhanced Light Mode Visibility */
+.add-widget-zone {
+  position: relative;
+  border: 2px dashed rgba(var(--primary), 0.7);
+  background: linear-gradient(45deg, rgba(var(--primary), 0.08), rgba(var(--primary), 0.15));
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 140px;
+  overflow: hidden;
+  animation: zone-breathe 3s ease-in-out infinite;
+  box-shadow: inset 0 0 0 1px rgba(var(--background), 0.6);
+}
+
+.add-widget-zone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(var(--primary), 0.2), 
+    transparent
+  );
+  animation: zone-shimmer 3s ease-in-out infinite;
+}
+
+.add-widget-zone::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(var(--primary), 0.5);
+  border-radius: 8px;
+  background: radial-gradient(circle at center, 
+    rgba(var(--primary), 0.12) 0%, 
+    transparent 70%
+  );
+  animation: inner-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes zone-breathe {
+  0%, 100% { 
+    border-color: rgba(var(--primary), 0.7);
+    background: linear-gradient(45deg, rgba(var(--primary), 0.08), rgba(var(--primary), 0.15));
+  }
+  50% { 
+    border-color: rgba(var(--primary), 0.9);
+    background: linear-gradient(45deg, rgba(var(--primary), 0.15), rgba(var(--primary), 0.22));
+  }
+}
+
+@keyframes zone-shimmer {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+@keyframes inner-pulse {
+  0% { 
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% { 
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+.add-widget-zone:hover {
+  border-color: rgba(var(--primary), 1);
+  background: linear-gradient(45deg, rgba(var(--primary), 0.15), rgba(var(--primary), 0.25));
+  transform: scale(1.02);
+  box-shadow: 
+    0 8px 25px rgba(var(--primary), 0.25),
+    inset 0 0 0 1px rgba(var(--background), 0.8);
+}
+
+.add-widget-zone:hover::after {
+  border-color: rgba(var(--primary), 0.7);
+  animation-duration: 1s;
+}
+
+/* Light mode specific improvements for add-widget-zone */
+@media (prefers-color-scheme: light) {
+  .add-widget-zone {
+    border: 2px dashed rgba(var(--primary), 0.9);
+    background: linear-gradient(45deg, rgba(var(--primary), 0.15), rgba(var(--primary), 0.22));
+    box-shadow: 
+      inset 0 0 0 1px rgba(var(--background), 0.8),
+      0 2px 8px rgba(var(--primary), 0.1);
+  }
+  
+  .add-widget-zone::before {
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(var(--primary), 0.3), 
+      transparent
+    );
+  }
+  
+  .add-widget-zone::after {
+    border: 1px dashed rgba(var(--primary), 0.7);
+    background: radial-gradient(circle at center, 
+      rgba(var(--primary), 0.18) 0%, 
+      transparent 70%
+    );
+  }
+  
+  @keyframes zone-breathe {
+    0%, 100% { 
+      border-color: rgba(var(--primary), 0.9);
+      background: linear-gradient(45deg, rgba(var(--primary), 0.15), rgba(var(--primary), 0.22));
+    }
+    50% { 
+      border-color: rgba(var(--primary), 1);
+      background: linear-gradient(45deg, rgba(var(--primary), 0.22), rgba(var(--primary), 0.3));
+    }
+  }
+}
+
+/* Enhanced Grid Drop Zones with Better Light Mode Visibility */
+.grid-drop-zone {
+  position: relative;
+  border: 2px dashed rgba(var(--primary), 0.7);
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 0.12), 
+    rgba(var(--primary), 0.18), 
+    rgba(var(--primary), 0.12)
+  );
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 120px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(var(--background), 0.6);
+}
+
+.grid-drop-zone::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed rgba(var(--primary), 0.5);
+  border-radius: 8px;
+  background: 
+    repeating-linear-gradient(45deg,
+      transparent,
+      transparent 8px,
+      rgba(var(--primary), 0.08) 8px,
+      rgba(var(--primary), 0.08) 16px
+    );
+  animation: diagonal-move 4s linear infinite;
+}
+
+.grid-drop-zone::after {
+  content: attr(data-grid-label);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  color: rgba(var(--primary), 0.9);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  background: rgba(var(--background), 0.9);
+  padding: 6px 12px;
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(var(--primary), 0.3);
+  text-shadow: 0 1px 2px rgba(var(--background), 0.8);
+}
+
+@keyframes diagonal-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 32px 32px; }
+}
+
+.grid-drop-zone:hover {
+  border-color: rgba(var(--primary), 0.9);
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 0.18), 
+    rgba(var(--primary), 0.25), 
+    rgba(var(--primary), 0.18)
+  );
+  transform: scale(1.02);
+  box-shadow: 
+    0 8px 25px rgba(var(--primary), 0.2),
+    inset 0 0 0 1px rgba(var(--background), 0.8);
+}
+
+.grid-drop-zone:hover::before {
+  border-color: rgba(var(--primary), 0.7);
+  background: 
+    repeating-linear-gradient(45deg,
+      transparent,
+      transparent 8px,
+      rgba(var(--primary), 0.12) 8px,
+      rgba(var(--primary), 0.12) 16px
+    );
+}
+
+.grid-drop-zone:hover::after {
+  color: rgba(var(--primary), 1);
+  border-color: rgba(var(--primary), 0.5);
+  background: rgba(var(--background), 0.95);
+}
+
+/* Light mode specific improvements for grid-drop-zone */
+@media (prefers-color-scheme: light) {
+  .grid-drop-zone {
+    border: 2px dashed rgba(var(--primary), 0.9);
+    background: linear-gradient(135deg, 
+      rgba(var(--primary), 0.18), 
+      rgba(var(--primary), 0.25), 
+      rgba(var(--primary), 0.18)
+    );
+    box-shadow: 
+      inset 0 0 0 1px rgba(var(--background), 0.8),
+      0 2px 8px rgba(var(--primary), 0.1);
+  }
+  
+  .grid-drop-zone::before {
+    border: 1px dashed rgba(var(--primary), 0.7);
+    background: 
+      repeating-linear-gradient(45deg,
+        transparent,
+        transparent 8px,
+        rgba(var(--primary), 0.12) 8px,
+        rgba(var(--primary), 0.12) 16px
+      );
+  }
+  
+  .grid-drop-zone::after {
+    color: rgba(var(--primary), 1);
+    border: 1px solid rgba(var(--primary), 0.5);
+    background: rgba(var(--background), 0.95);
+    text-shadow: 0 1px 2px rgba(var(--background), 0.9);  }
+  
+  .grid-drop-zone:hover {
+    border-color: rgba(var(--primary), 1);
+    background: linear-gradient(135deg, 
+      rgba(var(--primary), 0.25), 
+      rgba(var(--primary), 0.32), 
+      rgba(var(--primary), 0.25)
+    );
+  }
+}
+
+.grid-drop-zone:hover::before {
+  border-color: rgba(var(--primary), 0.4);
+  animation-duration: 2s;
+}
+
+.grid-drop-zone:hover::after {
+  color: rgba(var(--primary), 0.9);
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+/* Animated Border Effects for Drop Zones */
+.grid-drop-zone.active {
+  animation: active-zone-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes active-zone-glow {
+  0%, 100% { 
+    box-shadow: 0 0 0 rgba(var(--primary), 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(var(--primary), 0.3);
+  }
+}
+
+/* Corner Indicators for Drop Zones */
+.grid-drop-zone .corner-indicator {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid rgba(var(--primary), 0.5);
+  background: rgba(var(--background), 0.9);
+  transition: all 0.3s ease;
+}
+
+.grid-drop-zone .corner-indicator.top-left {
+  top: -4px;
+  left: -4px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 4px 0 0 0;
+}
+
+.grid-drop-zone .corner-indicator.top-right {
+  top: -4px;
+  right: -4px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 4px 0 0;
+}
+
+.grid-drop-zone .corner-indicator.bottom-left {
+  bottom: -4px;
+  left: -4px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 4px;
+}
+
+.grid-drop-zone .corner-indicator.bottom-right {
+  bottom: -4px;
+  right: -4px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 4px 0;
+}
+
+.grid-drop-zone:hover .corner-indicator {
+  border-color: rgba(var(--primary), 0.8);
+  transform: scale(1.2);
+}
+
+/* Enhanced Widget Placeholder Animations */
+.widget-placeholder-enhanced {
+  position: relative;
+  overflow: hidden;
+}
+
+.widget-placeholder-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    rgba(var(--primary), 0.1), 
+    rgba(var(--primary), 0.2), 
+    rgba(var(--primary), 0.1)
+  );
+  border-radius: inherit;
+  z-index: -1;
+  animation: placeholder-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes placeholder-glow {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Drag Over States for Enhanced Feedback */
+.grid-drop-zone.drag-over {
+  border-color: rgba(var(--primary), 0.8);
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 0.12), 
+    rgba(var(--primary), 0.18), 
+    rgba(var(--primary), 0.12)
+  );
+  animation: drag-over-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes drag-over-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(var(--primary), 0.4);
+  }
+  50% { 
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(var(--primary), 0.3);
+  }
+}
+
+/* Enhanced Drop Zone Overlay Styles */
+.grid-drop-zone-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 0.15), 
+    rgba(var(--primary), 0.25), 
+    rgba(var(--primary), 0.15)
+  );
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: drop-zone-appear 0.3s ease-out;
+}
+
+@keyframes drop-zone-appear {
+  0% { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced Grid Layout Drag Over States */
+.layout.drag-over-active {
+  position: relative;
+}
+
+.layout.drag-over-active::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border: 3px dashed rgba(var(--primary), 0.6);
+  border-radius: 16px;
+  background: linear-gradient(45deg,
+    rgba(var(--primary), 0.08),
+    rgba(var(--primary), 0.12),
+    rgba(var(--primary), 0.08)
+  );
+  animation: drag-over-pulse 1s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes drag-over-pulse {
+  0%, 100% { 
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* Widget Drop Zone Enhancement */
+.layout.drag-over-active .react-grid-item {
+  transition: all 0.3s ease;
+  transform: scale(0.98);
+  opacity: 0.7;
+}
+
+.layout.drag-over-active .react-grid-item:hover {
+  transform: scale(1);
+  opacity: 1;
+  box-shadow: 0 8px 25px rgba(var(--primary), 0.2);
+}
+
+/* Professional Drop Zone Indicators */
+.drop-zone-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.5rem 2rem;
+  background: rgba(var(--background), 0.95);
+  border: 2px solid rgba(var(--primary), 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* Floating Drop Zone Animation */
+.floating-drop-zone {
+  animation: float-drop-zone 2s ease-in-out infinite;
+}
+
+@keyframes float-drop-zone {
+  0%, 100% { 
+    transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-8px);
+  }
+}
+
+/* Enhanced Widget Card Drag States */
+.widget-card.drag-source {
+  opacity: 0.8;
+  transform: scale(1.02) rotate(1deg);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.widget-card.drag-source::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid rgba(var(--primary), 0.4);
+  border-radius: inherit;
+  animation: drag-source-glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes drag-source-glow {
+  0% { 
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* Enhanced Responsive Design with Scrolling Support */
+@media (max-width: 768px) {
+  .widget-side-panel {
+    width: 100vw !important;
+  }
+}
+
+/* Full-screen widget zone with dynamic height support */
+.full-screen-widget-zone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  z-index: 5;
+  /* Ensure it expands with content */
+  min-height: max(100vh, 100%);
+}
+
+/* Grid container enhancements for better scrolling behavior */
+.dashboard-grid-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding-bottom: 100px; /* Add bottom padding for scrolling */
+}
+
+/* React Grid Layout container improvements */
+.react-grid-layout {
+  position: relative;
+  min-height: auto;
+  padding-bottom: 150px !important; /* Ensure widgets are fully visible */
+}
+
+/* Edit mode container with proper padding */
+.edit-mode-container {
+  padding-bottom: 120px !important;
+  min-height: auto;
+  position: relative;
+}
+
+/* Ensure proper scrolling in main content area */
+.main-content-area {
+  padding-bottom: 100px;
+  min-height: auto;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.main-content-area > div {
+  min-height: auto;
+}
+
+/* Professional Widget Styles */
+
+/* Widget Container */
+.widget-container {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Adaptive sizing for small widgets */
+.react-grid-item[data-grid*='"h":2'] .widget-card,
+.react-grid-item[data-grid*='"h":1'] .widget-card {
+  font-size: 0.85rem;
+}
+
+.react-grid-item[data-grid*='"h":2'] .widget-card h3,
+.react-grid-item[data-grid*='"h":1'] .widget-card h3 {
+  font-size: 0.8rem;
+}
+
+/* Hide elements for very small widgets */
+.react-grid-item[data-grid*='"h":1'] .border-b {
+  display: none;
+}
+
+/* Clean Drag and Drop */
+.react-grid-item {
+  background: transparent;
+  border: none;
+}
+
+.react-grid-item.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.react-grid-item.resizing {
+  transition: none;
+}
+
+/* Enhanced Resize Handles with Modern Styling */
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 0.9), 
+    rgba(var(--primary), 1)
+  );
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.react-resizable-handle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: 
+    linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.4) 32%, transparent 32%),
+    linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.4) 32%, transparent 32%);
+  background-size: 4px 4px;
+  border-radius: 3px;
+  opacity: 0.8;
+}
+
+.react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-bottom: 6px solid rgba(255, 255, 255, 0.6);
+  border-radius: 0 0 3px 0;
+}
+
+.react-resizable-handle-se {
+  bottom: -10px;
+  right: -10px;
+  cursor: se-resize;
+}
+
+.widget-container:hover .react-resizable-handle,
+.react-grid-item:hover .react-resizable-handle {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.widget-container:hover .react-resizable-handle:hover,
+.react-grid-item:hover .react-resizable-handle:hover {
+  transform: scale(1.15);
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 1), 
+    rgba(var(--primary), 1.1)
+  );
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 4px 16px rgba(var(--primary), 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.widget-container:hover .react-resizable-handle:hover::before {
+  opacity: 1;
+}
+
+.widget-container:hover .react-resizable-handle:hover::after {
+  border-bottom-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Active Resizing State */
+.react-grid-item.react-resizable-resizing .react-resizable-handle {
+  opacity: 1 !important;
+  transform: scale(1.2);
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 1), 
+    rgba(var(--secondary), 0.9)
+  );
+  animation: resize-pulse 0.6s ease-in-out infinite alternate;
+  box-shadow: 
+    0 6px 20px rgba(var(--primary), 0.5),
+    0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.react-grid-item.react-resizable-resizing .react-resizable-handle::before {
+  opacity: 1;
+  background: 
+    linear-gradient(135deg, transparent 25%, rgba(255, 255, 255, 0.6) 25%, rgba(255, 255, 255, 0.6) 27%, transparent 27%),
+    linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.6) 25%, rgba(255, 255, 255, 0.6) 27%, transparent 27%);
+  background-size: 3px 3px;
+}
+
+@keyframes resize-pulse {
+  0% { 
+    box-shadow: 
+      0 6px 20px rgba(var(--primary), 0.5),
+      0 3px 10px rgba(0, 0, 0, 0.3);
+  }
+  100% { 
+    box-shadow: 
+      0 8px 25px rgba(var(--primary), 0.7),
+      0 4px 15px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Enhanced Drag Handle Styling */
+.edit-mode-grid .drag-handle {
+  background: linear-gradient(45deg, rgba(var(--primary), 0.08), rgba(var(--secondary), 0.08));
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+}
+
+.edit-mode-grid .drag-handle:hover {
+  background: linear-gradient(45deg, rgba(var(--primary), 0.12), rgba(var(--secondary), 0.12));
+}
+
+/* Widget Overlay Enhancements for Edit Mode */
+.edit-mode-grid .widget-card {
+  position: relative;
+}
+
+.edit-mode-grid .widget-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Grid Layout Visual Helpers */
+.edit-mode-grid::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 24px 24px, rgba(var(--primary), 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: -2;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .widget-container {
+    margin-bottom: 12px;
+  }
+  
+  .react-grid-item {
+    touch-action: none;
+  }
+  
+  .react-resizable-handle {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .react-resizable-handle-se {
+    bottom: -12px;
+    right: -12px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .react-resizable-handle-se::before {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .react-resizable-handle-se::after {
+    width: 20px;
+    height: 20px;
+    background-size: 5px 5px;
+  }
+  
+  /* Larger touch targets for mobile */
+  .widget-container:hover .react-resizable-handle:hover,
+  .react-grid-item:hover .react-resizable-handle:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .widget-container,
+  .react-grid-item,
+  .edit-mode-grid::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Enhanced Keyboard Shortcuts Panel Styles */
+.keyboard-shortcuts-panel {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.keyboard-shortcuts-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(var(--primary), 0.1) 0%,
+    rgba(var(--primary), 0.05) 50%,
+    transparent 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.keyboard-shortcuts-toggle {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.keyboard-shortcuts-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Enhanced KBD Key Styling */
+kbd {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-weight: 500;
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+kbd:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Light Mode Enhancements for Keyboard Panel */
+@media (prefers-color-scheme: light) {
+  .keyboard-shortcuts-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 20px 25px -5px rgba(0, 0, 0, 0.15),
+      0 10px 10px -5px rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+  
+  .keyboard-shortcuts-toggle {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  kbd {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Dark Mode Specific Styles */
+@media (prefers-color-scheme: dark) {
+  .keyboard-shortcuts-panel {
+    background: rgba(15, 15, 15, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .keyboard-shortcuts-toggle {
+    background: rgba(15, 15, 15, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  kbd {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Smooth Animations */
+.fade-in-up {
+  animation: fadeInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse-soft {
+  animation: pulseSoft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Enhanced WidgetSidePanel Animation Styles */
+.widget-side-panel {
+  transform: translateX(100%) !important;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1) !important;
+  transition-property: transform, opacity, visibility !important;
+  will-change: transform, opacity !important;
+}
+
+.widget-side-panel.open {
+  transform: translateX(0) !important;
+  opacity: 1;
+  visibility: visible;
+  transition-duration: 0.6s !important;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
+
+.widget-side-panel.closing {
+  transform: translateX(100%) !important;
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 0.4s !important;
+  transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06) !important;
+}
+
+/* Animation for panel content */
+.widget-side-panel .panel-content {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-delay: 0.1s !important;
+}
+
+.widget-side-panel.open .panel-content {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s !important;
+}
+
+/* Backdrop overlay - Fixed to prevent clicking issues */
+.widget-panel-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 49;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.widget-panel-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Professional Widget Side Panel Animations */
+.widget-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 40;
+}
+
+.widget-panel-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.widget-side-panel {
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.widget-side-panel.open {
+  transform: translateX(0);
+}
+
+.widget-side-panel.closing {
+  transform: translateX(100%);
+}
+
+/* Draggable Widget Enhancements */
+.draggable-widget {
+  cursor: grab;
+  transition: all 0.2s ease;
+}
+
+.draggable-widget:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-widget:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+
+.draggable-widget.dragging {
+  opacity: 0.6;
+  transform: scale(0.95) rotate(5deg);
+  z-index: 1000;
+}
+
+/* Widget Drop Zone Enhancements */
+.widget-drop-zone {
+  position: relative;
+  min-height: 200px;
+  border: 2px dashed transparent;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.widget-drop-zone.drag-over {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.05);
+  box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.2);
+}
+
+.widget-drop-zone.drag-over::before {
+  content: 'Drop widget here';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: hsl(var(--primary));
+  font-weight: 500;
+  font-size: 0.875rem;
+  pointer-events: none;
+}
+
+/* Enhanced Grid Item Animations */
+.grid-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.grid-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+  z-index: 1000;
+}
+
+/* Professional Widget Card Styles */
+.widget-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.widget-card:hover {
+  border-color: hsl(var(--primary) / 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.widget-card-header {
+  background: linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--muted) / 0.8) 100%);
+  border-bottom: 1px solid hsl(var(--border));
+  padding: 1rem;
+}
+
+.widget-category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+  color: white;
+  box-shadow: 0 2px 8px hsl(var(--primary) / 0.3);
+}
+
+/* Smooth Scroll Areas */
+.scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+}
+
+.scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Professional Tab Transitions */
+.tab-content-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.tab-content-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.2s ease;
+}
+
+.tab-content-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tab-content-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+}
+
+/* Professional Button Styles */
+.professional-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.professional-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.professional-button:hover::before {
+  left: 100%;
+}
+
+/* Widget Panel Search Enhancements */
+.widget-search {
+  position: relative;
+}
+
+.widget-search-results {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: hsl(var(--popover));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.widget-search-item {
+  padding: 0.75rem;
+  border-bottom: 1px solid hsl(var(--border));
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.widget-search-item:hover {
+  background: hsl(var(--muted));
+}
+
+.widget-search-item:last-child {
+  border-bottom: none;
+}
+
+/* Professional Loading States */
+.professional-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.professional-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid hsl(var(--muted));
+  border-top: 2px solid hsl(var(--primary));
+  border-radius: 50%;
+  animation: professional-spin 1s linear infinite;
+}
+
+@keyframes professional-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Theme-consistent utility classes */
+.solid-bg-primary {
+  background-color: rgba(var(--primary), 0.06) !important;
+}
+
+.solid-bg-primary-hover {
+  background-color: rgba(var(--primary), 0.1) !important;
+}
+
+.solid-border-primary {
+  border-color: rgba(var(--primary), 0.6) !important;
+}
+
+/* Dark mode amber utilities */
+@media (prefers-color-scheme: dark) {
+  .solid-bg-amber {
+    background-color: rgba(245, 158, 11, 0.08) !important;
+  }
+  
+  .solid-bg-amber-hover {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+  }
+  
+  .solid-border-amber {
+    border-color: rgba(245, 158, 11, 0.7) !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .full-screen-widget-zone::before {
+    border-width: 3px;
+    border-color: rgba(var(--primary), 1);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .full-screen-widget-zone::before {
+      border-color: rgba(245, 158, 11, 1);
+    }
+  }
+}
+
+/* Enhanced scrolling support and drop zone coverage */
+.edit-mode-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.edit-mode-container .full-screen-widget-zone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100%;
+  height: 100%;
+  /* Ensure it covers the entire scrollable area */
+  width: 100%;
+}
+
+/* Ensure proper bottom spacing for widget visibility */
+.widget-container {
+  margin-bottom: 8px;
+}
+
+.widget-container:last-child {
+  margin-bottom: 40px;
+}
+
+/* Enhanced edit mode grid with proper height */
+.edit-mode-grid {
+  min-height: calc(100vh - 120px);
+  padding-bottom: 60px;
+}
+
+/* Ensure background patterns cover full scrollable area */
+.bg-grid-pattern,
+.bg-dot-pattern {
+  min-height: 100vh;
+  height: auto;
+  /* Make patterns scroll with content */
+  background-attachment: local;
+  /* Ensure they extend to cover all content */
+  background-repeat: repeat;
+}
+
+/* Fix for main content area scrolling */
+.main-content-area {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.main-content-area > div {
+  min-height: calc(100vh - 80px);
+}
+
+/* Ensure drop zone dashed border extends with content */
+.edit-mode-container.border-dashed {
+  min-height: calc(100vh - 40px);
+  height: auto;
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .edit-mode-container {
+    background-color: rgba(245, 158, 11, 0.03);
+  }
+  
+  .edit-mode-container.border-dashed {
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+}
+
+/* Light mode specific adjustments */
+@media (prefers-color-scheme: light) {
+  .edit-mode-container {
+    background-color: rgba(var(--primary), 0.03);
+  }
+  
+  .edit-mode-container.border-dashed {
+    border-color: rgba(var(--primary), 0.4);
+  }
+}
+
+/* Additional CSS for improved scrolling and full coverage */
+
+/* Ensure proper scroll behavior in edit mode */
+.edit-mode-container {
+  position: relative;
+  min-height: calc(100vh - 80px);
+  /* Ensure it always has enough height */
+}
+
+/* Make sure the full-screen widget zone covers scrolled content */
+.full-screen-widget-zone {
+  /* Use absolute positioning to cover the entire container */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Ensure it covers the full height including scrolled content */
+  min-height: 100%;
+  height: auto;
+  /* Expand with content */
+  width: 100%;
+}
+
+/* Dynamic height adjustment for edit mode containers */
+.edit-mode-container.border-dashed {
+  /* Ensure the dashed border container expands with content */
+  min-height: auto;
+  height: auto;
+  /* Allow it to grow with content */
+}
+
+/* Ensure React Grid Layout has proper bottom spacing */
+.react-grid-layout {
+  position: relative;
+  padding-bottom: 100px !important;
+  min-height: auto !important;
+  /* Ensure widgets are fully visible when scrolling */
+}
+
+/* Better scroll handling for main content area */
+.main-content-area {
+  /* Enable smooth scrolling */
+  scroll-behavior: smooth;
+  /* Ensure proper overflow handling */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Widget container improvements for better visibility */
+.widget-container {
+  /* Ensure widgets have proper spacing */
+  margin-bottom: 16px;
+}
+
+.widget-container:last-child {
+  /* Extra spacing for the last widget */
+  margin-bottom: 80px;
+}
+
+/* Responsive adjustments for different screen sizes */
+@media (max-width: 768px) {
+  .edit-mode-container {
+    min-height: calc(100vh - 60px);
+    padding-bottom: 80px;
+  }
+  
+  .react-grid-layout {
+    padding-bottom: 120px !important;
+  }
+  
+  .widget-container:last-child {
+    margin-bottom: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-mode-container {
+    min-height: calc(100vh - 40px);
+    padding-bottom: 100px;
+  }
+  
+  .react-grid-layout {
+    padding-bottom: 140px !important;
+  }
+  
+  .widget-container:last-child {
+    margin-bottom: 120px;
+  }
+}
+
+/* Ensure floating buttons don't interfere with scrolling */
+.floating-add-widget {
+  /* Ensure it's always visible above content */
+  z-index: 100;
+  /* Add some margin from bottom to avoid scroll interference */
+  margin-bottom: 20px;
+}
+
+/* Improve background pattern coverage */
+.bg-grid-pattern,
+.bg-dot-pattern {
+  /* Ensure patterns cover the full scrollable area */
+  min-height: 100vh;
+  height: auto;
+  /* Make patterns scroll with content */
+  background-attachment: local;
+  /* Ensure they extend to cover all content */
+  background-repeat: repeat;
+}
+
+/* Dark mode specific improvements for better contrast */
+@media (prefers-color-scheme: dark) {
+  .edit-mode-container.bg-muted\/30 {
+    background-color: rgba(245, 158, 11, 0.04) !important;
+  }
+  
+  .edit-mode-container.border-dashed {
+    border-color: rgba(245, 158, 11, 0.3) !important;
+  }
+}
+
+/* Light mode specific improvements */
+@media (prefers-color-scheme: light) {
+  .edit-mode-container.bg-muted\/30 {
+    background-color: rgba(var(--primary), 0.04) !important;
+  }
+  
+  .edit-mode-container.border-dashed {
+    border-color: rgba(var(--primary), 0.3) !important;
+  }
+}

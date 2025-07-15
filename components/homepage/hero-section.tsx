@@ -11,8 +11,8 @@ export default function HeroSection() {
             {/* <div className="my-5"
                 <AnimatedGradientTextComponent />
             </div> */}
-            <h1 className="scroll-m-20 text-4xl sm:text-4xl md:text-6xl font-semibold tracking-tight lg:text-6xl text-center max-w-[1000px]  dark:text-white">
-                Unleash the Power of Your Data with <span className='text-primary'>Deltabase</span>
+            <h1 className="scroll-m-20 text-4xl sm:text-4xl  md:text-6xl font-sans-serif font-semibold tracking-tight lg:text-6xl text-center max-w-[1000px]  dark:text-white">
+                Unleash the Power of Your Data with <span className='text-primary font-sans font-semibold'>Refract</span>
             </h1>
             <p className="mx-auto max-w-[800px] text-gray-500 text-xl text-center mt-2 dark:text-gray-400">
                 Transform raw data into actionable insights with our intuitive analysis and dashboard building tool. Make data-driven decisions effortlessly

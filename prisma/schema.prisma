@@ -1,115 +1,183 @@
 generator client {
   provider = "prisma-client-js"
-  output = "./generated/client"
+  output   = "./generated/client"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("NEXT_PUBLIC_SUPABASE_DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("NEXT_PUBLIC_SUPABASE_DATABASE_URL")
   directUrl = env("NEXT_PUBLIC_SUPABASE_DRCT_URL")
 }
 
 model users {
-  id             Int                    @id @default(autoincrement())
-  user_id        String                 @unique
-  attributes     Json
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt
-  connections    database_connections[]  // One-to-many relation to Database Connections
-  datasets       datasets[]             // One-to-many relation to Datasets
-  dashboards     dashboards[]           // One-to-many relation to Dashboards
-  api_connections api_connections[]     // One-to-many relation to API Connections
-  csvData        csvData[]              // One-to-many relation to CSV Data
-  storage        users_storage[]        // One-to-many relation to Users Storage
+  id           Int                    @id @default(autoincrement())
+  user_id      String                 @unique
+  attributes   Json
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  csvdata      csvdata[]
+  data_sources data_sources[]
+  connections  database_connections[]
+  datasets     datasets[]
+  analytics_events analytics_events[]
 }
 
 model api_connections {
-  id                Int        @id @default(autoincrement())
-  connection_name   String
-  api_url           String
-  api_key           String?
-  headers           Json?
-  user_id           String      // Foreign key reference to User's user_id
-  created_at        DateTime    @default(now())
-  updated_at        DateTime    @default(now())
-
-  user              users       @relation(fields: [user_id], references: [user_id])
-  datasets          datasets[]   // One-to-many relation to Datasets
+  id                     Int                   @id @default(autoincrement())
+  connection_name        String
+  api_url                String
+  api_key                String?
+  headers                Json?
+  user_id                String
+  created_at             DateTime              @default(now())
+  updated_at             DateTime              @default(now())
+  database_connection_id Int?
+  table_name             String?
+  connection             database_connections? @relation(fields: [database_connection_id], references: [id], onDelete: Cascade)
+  data_sources           data_sources[]
 }
 
 model csvData {
-  id              BigInt   @id @default(autoincrement())
-  user_id         String   // Foreign key reference to User's user_id
-  bucket_name     String?  // Nullable
-  file_name       String?  // Nullable
-  selectedFields   String[] // Array field to store selected fields from the CSV
-  createdat       DateTime @default(now())
-  updatedat       DateTime @default(now())
-  connection_name  String?  // Nullable
-
-  user            users    @relation(fields: [user_id], references: [user_id])
+  id              BigInt    @id(map: "storage_with_metadata_pkey") @default(autoincrement())
+  user_id         String
+  bucket_name     String?
+  file_name       String?
+  selectedFields  String[]
+  createdat       DateTime? @default(now()) @db.Timestamptz(6)
+  updatedat       DateTime? @default(now()) @db.Timestamptz(6)
+  connection_name String?
 }
 
 model dashboards {
-  id                Int                @id @default(autoincrement())
-  name              String
-  description       String?
-  user_id           String             // Foreign key reference to User's user_id
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  widget_details    Json               // Stores widget details in JSON format
-  layout            Json?              // Stores the layout (positions, sizes) of widgets
-  custom_settings   Json?              // Optional field to store any other custom settings
-  type              String?            // Nullable
-
-  user              users              @relation(fields: [user_id], references: [user_id])
+  id              Int      @id @default(autoincrement())
+  name            String
+  description     String?
+  user_id         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+  widget_details  Json?
+  layout          Json?
+  custom_settings Json?
+  type            String?
 }
 
 model database_connections {
-  id                Int                @id @default(autoincrement())
-  connection_name   String
-  database_name     String
-  database_type     String
-  host              String
-  username          String
-  password          String
-  user_id           String             // Foreign key reference to User's user_id
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @default(now())
-
-  user              users               @relation(fields: [user_id], references: [user_id])
-  datasets          datasets[]          // One-to-many relation to Datasets
+  id              Int               @id @default(autoincrement())
+  connection_name String
+  database_name   String
+  database_type   String
+  host            String
+  username        String
+  password        String
+  user_id         String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  api_connections api_connections[]
+  data_sources    data_sources[]
+  user            users             @relation(fields: [user_id], references: [user_id])
 }
 
 model datasets {
-  id                  Int      @id @default(autoincrement())
-  dataset_name        String
-  dataset_description String?  // Nullable
-  sql_query           String
-  connection_id       Int?     // Nullable
-  user_id             String
-  visualization_type  String
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  selectedField       String?  // Nullable
-  x_axis              String?  // Nullable
-  y_axis              String?  // Nullable
-  issample            Boolean? // Nullable
-  is_stacked          Boolean  @default(false)
-  api_id              Int?     // Nullable
-  csv_id              Int?     // Nullable
-  filters             Json?    // New column to store filter details
-  connection          database_connections? @relation(fields: [connection_id], references: [id], onDelete: Cascade)
-  user                users                 @relation(fields: [user_id], references: [user_id])
-  api_connections     api_connections?      @relation(fields: [api_id], references: [id], onDelete: Cascade)
+  id                    Int      @id @default(autoincrement())
+  dataset_name          String
+  dataset_description   String?
+  sql_query             String
+  connection_id         Int?
+  user_id               String
+  visualization_type    String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now()) @updatedAt
+  selectedField         String?
+  x_axis                String?
+  y_axis                String?
+  issample              Boolean?
+  is_stacked            Boolean? @default(false)
+  api_id                Int?
+  csv_id                Int?
+  filters               Json?    @db.Json
+  table_name            String?
+  selectedAggregate     String?
+  selectedGroupByValues String[]
+  selectedDateBy        String?
+  user                  users    @relation(fields: [user_id], references: [user_id])
+}
+
+model data_sources {
+  id                     BigInt                @id @default(autoincrement())
+  user_id                String?
+  source_name            String?
+  source_type            String?
+  database_name          String?
+  table_name             String?
+  database_connection_id Int?
+  csv_data_id            BigInt?
+  api_connection_id      Int?
+  row_count              Int?
+  column_count           Int?
+  data_schema            Json?                 @db.Json
+  last_updated           DateTime?             @default(now()) @db.Timestamptz(6)
+  cache_key              String?
+  partition_info         Json?                 @db.Json
+  index_info             Json?                 @db.Json
+  avg_query_time_ms      Float?
+  total_queries          Int?                  @default(0)
+  last_accessed          DateTime?             @db.Timestamptz(6)
+  data_quality_score     Float?
+  null_percentage        Float?
+  duplicate_count        Int?
+  api_connection         api_connections?      @relation(fields: [api_connection_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_data_source_api")
+  csv_data               csvdata?              @relation(fields: [csv_data_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_data_source_csv")
+  database_connection    database_connections? @relation(fields: [database_connection_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_data_source_db_connection")
+  user                   users?                @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_data_source_user")
+  analytics_events       analytics_events[]
 }
 
 model users_storage {
-  id          BigInt   @id @default(autoincrement())
-  user_id     String   // Foreign key reference to User's user_id
-  bucket_name String?  // Nullable
-  createdat   DateTime @default(now())
-  updatedat   DateTime @default(now())
+  id          BigInt    @id @default(autoincrement())
+  user_id     String
+  bucket_name String?
+  createdat   DateTime? @default(now()) @db.Timestamptz(6)
+  updatedat   DateTime? @default(now()) @db.Timestamptz(6)
+}
 
-  user              users              @relation(fields: [user_id], references: [user_id])
+model analytics_events {
+  id               BigInt   @id @default(autoincrement())
+  data_source_id   BigInt
+  event_type       String   @db.VarChar(100)
+  event_metadata   Json     @default("{}") @db.Json
+  timestamp        DateTime @default(now()) @db.Timestamptz(6)
+  user_id          String?
+  session_id       String?  @db.VarChar(255)
+  ip_address       String?
+  
+  // Relations
+  data_source      data_sources @relation(fields: [data_source_id], references: [id], onDelete: Cascade)
+  user             users?       @relation(fields: [user_id], references: [user_id], onDelete: SetNull)
+  
+  @@index([data_source_id], name: "idx_analytics_events_data_source_id")
+  @@index([event_type], name: "idx_analytics_events_event_type")  
+  @@index([timestamp(sort: Desc)], name: "idx_analytics_events_timestamp")
+  @@index([user_id], name: "idx_analytics_events_user_id")
+  @@index([data_source_id, event_type, timestamp(sort: Desc)], name: "idx_analytics_events_source_type_timestamp")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model csvdata {
+  id                BigInt         @id @default(autoincrement())
+  user_id           String?
+  bucket_name       String?
+  file_name         String?
+  selectedfields    String[]
+  createdat         DateTime?      @default(now()) @db.Timestamptz(6)
+  updatedat         DateTime?      @default(now()) @db.Timestamptz(6)
+  connection_name   String?
+  file_size_bytes   BigInt?
+  row_count         Int?
+  column_count      Int?
+  data_schema       Json?          @db.Json
+  processing_status String?        @default("pending")
+  error_message     String?
+  checksum          String?
+  users             users?         @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_csv_user")
+  data_sources      data_sources[]
 }

@@ -3,9 +3,14 @@
 import { ReactNode, useEffect } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import DashboardSideBar from "./_components/dashboard-side-bar";
-import Topbar from "./_components/dashbord-top-nav";
+import { Topbar } from "./_components/dashbord-top-nav";
 import { useParams } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import { useSidePanelStore } from "@/store/sidePanelStates";
+import { useShallow } from "zustand/shallow";
+import { BackgroundBeams } from "./_components/background-beam";
+import { Spotlight } from "./_components/spotlight-new";
+import AISidePanel from "./_components/AISidePanel";
 
 interface MailProps {
   accounts: {
@@ -24,15 +29,14 @@ export default function DashboardLayout({
   defaultCollapsed = false,
   navCollapsedSize,
   children,
-}: MailProps & { children: ReactNode }) {
+}: MailProps & { children: ReactNode | ReactNode[] }) {
   const { id } = useParams();
-  // Use effect to disable body scroll
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
+  const { isAiSidePanelOpen, setIsAiSidePanelOpen } = useSidePanelStore(
+    useShallow((state) => ({
+      isAiSidePanelOpen: state.isAiSidePanelOpen,
+      setIsAiSidePanelOpen: state.setIsAiSidePanelOpen,
+    }))
+  );
 
   return (
     <TooltipProvider>
@@ -41,11 +45,11 @@ export default function DashboardLayout({
           <DashboardSideBar />
         </div>
 
-        <main className="w-full flex-1 overflow-auto ">
-        <Topbar />
+        <main className="w-full flex-1 overflow-auto flex flex-col min-h-0">
+          <Topbar />
           <Toaster
             toastOptions={{
-              duration: 5000, // Custom duration setting (5 seconds)
+              duration: 5000,
               error: {
                 className: "border border-white/10 text-sm",
                 style: {
@@ -61,9 +65,15 @@ export default function DashboardLayout({
                 },
               },
             }}
-          />
-          {/* <DashboardTopNav id={id}/> */}
-          <div className="mt-12 h-full ">{children}</div>
+          />          {/* Main content area with sidebar */}
+          <div className="mt-12 flex flex-1 min-h-0 overflow-hidden">
+            {/* Main Content */}
+            <div className={`transition-all duration-800 flex-1 overflow-auto ${isAiSidePanelOpen ? "mr-[540px]" : ""}`}>
+              {children}
+            </div>
+            {/* Side Panel */}
+            <AISidePanel />
+          </div>
         </main>
       </div>
     </TooltipProvider>

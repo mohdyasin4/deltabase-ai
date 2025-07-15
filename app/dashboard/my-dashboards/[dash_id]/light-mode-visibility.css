@@ -1,0 +1,197 @@
+/* Light Mode Visibility Enhancements for Widget Drop Zones and Yellow Elements */
+
+@media (prefers-color-scheme: light) {
+  /* Enhanced visibility for yellow/lime text elements in light mode */
+  .text-yellow-500,
+  .text-yellow-600,
+  .text-lime-500,
+  .text-lime-600 {
+    color: hsl(45 93% 30%) !important;
+    font-weight: 500;
+  }
+
+  /* Enhanced visibility for yellow/lime background elements */
+  .bg-yellow-50,
+  .bg-lime-50 {
+    background-color: hsl(45 93% 85%) !important;
+  }
+
+  .bg-yellow-100,
+  .bg-lime-100 {
+    background-color: hsl(45 93% 80%) !important;
+  }
+
+  /* Enhanced visibility for yellow/lime border elements */
+  .border-yellow-200,
+  .border-lime-200 {
+    border-color: hsl(45 93% 65%) !important;
+  }
+
+  .border-yellow-300,
+  .border-lime-300 {
+    border-color: hsl(45 93% 55%) !important;
+  }
+
+  /* Enhanced primary color visibility */
+  .text-primary {
+    color: hsl(var(--primary) / 0.9) !important;
+  }
+
+  .border-primary {
+    border-color: hsl(var(--primary) / 0.5) !important;
+  }
+
+  /* Enhance low-opacity primary backgrounds */
+  .bg-primary\/5 {
+    background-color: hsl(var(--primary) / 0.15) !important;
+  }
+
+  .bg-primary\/10 {
+    background-color: hsl(var(--primary) / 0.25) !important;
+  }
+
+  .bg-primary\/20 {
+    background-color: hsl(var(--primary) / 0.35) !important;
+  }
+
+  /* Enhanced widget drop zone visibility - override very low opacity values */
+  .full-screen-widget-zone {
+    background: linear-gradient(
+      45deg,
+      rgba(var(--primary), 0.18) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(var(--primary), 0.18) 50%,
+      rgba(var(--primary), 0.18) 75%,
+      transparent 75%
+    ) !important;
+  }
+
+  .full-screen-widget-zone::before {
+    border: 2px dashed rgba(var(--primary), 0.9) !important;
+    background: rgba(var(--primary), 0.22) !important;
+    box-shadow: 
+      inset 0 0 0 1px rgba(var(--background), 0.9),
+      0 2px 8px rgba(var(--primary), 0.15) !important;
+  }
+
+  /* Enhanced add-widget-zone visibility */
+  .add-widget-zone {
+    border: 2px dashed rgba(var(--primary), 1) !important;
+    background: linear-gradient(45deg, rgba(var(--primary), 0.18), rgba(var(--primary), 0.25)) !important;
+    box-shadow: 
+      inset 0 0 0 1px rgba(var(--background), 0.9),
+      0 2px 12px rgba(var(--primary), 0.15) !important;
+  }
+
+  .add-widget-zone::before {
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(var(--primary), 0.35), 
+      transparent
+    ) !important;
+  }
+
+  .add-widget-zone::after {
+    border: 1px dashed rgba(var(--primary), 0.8) !important;
+    background: radial-gradient(circle at center, 
+      rgba(var(--primary), 0.22) 0%, 
+      transparent 70%
+    ) !important;
+  }
+
+  /* Enhanced grid-drop-zone visibility */
+  .grid-drop-zone {
+    border: 2px dashed rgba(var(--primary), 1) !important;
+    background: linear-gradient(135deg, 
+      rgba(var(--primary), 0.22), 
+      rgba(var(--primary), 0.28), 
+      rgba(var(--primary), 0.22)
+    ) !important;
+    box-shadow: 
+      inset 0 0 0 1px rgba(var(--background), 0.9),
+      0 2px 12px rgba(var(--primary), 0.15) !important;
+  }
+
+  .grid-drop-zone::before {
+    border: 1px dashed rgba(var(--primary), 0.8) !important;
+    background: 
+      repeating-linear-gradient(45deg,
+        transparent,
+        transparent 8px,
+        rgba(var(--primary), 0.15) 8px,
+        rgba(var(--primary), 0.15) 16px
+      ) !important;
+  }
+
+  .grid-drop-zone::after {
+    color: rgba(var(--primary), 1) !important;
+    border: 1px solid rgba(var(--primary), 0.6) !important;
+    background: rgba(var(--background), 0.95) !important;
+    text-shadow: 0 1px 3px rgba(var(--background), 1) !important;
+    font-weight: 600;
+  }
+
+  /* Enhanced corner indicators */
+  .grid-drop-zone .corner-indicator {
+    border-color: rgba(var(--primary), 0.8) !important;
+    background: rgba(var(--background), 0.95) !important;
+  }
+
+  /* Enhanced edit mode grid visibility */
+  .edit-mode-grid::before {
+    background: 
+      linear-gradient(90deg, rgba(var(--primary), 0.1) 1px, transparent 1px),
+      linear-gradient(rgba(var(--primary), 0.1) 1px, transparent 1px) !important;
+    border: 1px dashed rgba(var(--primary), 0.35) !important;
+  }
+
+  .edit-mode-grid::after {
+    background: 
+      radial-gradient(circle at 24px 24px, rgba(var(--primary), 0.12) 1px, transparent 1px) !important;
+    opacity: 0.5 !important;
+  }
+
+  /* Enhanced widget container hover effects */
+  .edit-mode-grid .widget-container::before {
+    background: linear-gradient(45deg, rgba(var(--primary), 0.18), rgba(var(--primary), 0.12)) !important;
+  }
+
+  .edit-mode-grid .widget-container:hover::before {
+    opacity: 0.9 !important;
+  }
+
+  /* Enhanced resize grid pulse animation visibility */
+  @keyframes resize-grid-pulse {
+    0% { 
+      border-color: rgba(var(--primary), 0.4) !important;
+      background: rgba(var(--primary), 0.08) !important;
+    }
+    100% { 
+      border-color: rgba(var(--primary), 0.6) !important;
+      background: rgba(var(--primary), 0.12) !important;
+    }
+  }
+
+  /* Enhanced drag over pulse animation */
+  @keyframes drag-over-pulse {
+    0%, 100% { 
+      transform: scale(1);
+      box-shadow: 0 0 0 rgba(var(--primary), 0.5) !important;
+    }
+    50% { 
+      transform: scale(1.03);
+      box-shadow: 0 0 20px rgba(var(--primary), 0.4) !important;
+    }
+  }
+
+  /* Enhanced active zone glow */
+  @keyframes active-zone-glow {
+    0%, 100% { 
+      box-shadow: 0 0 0 rgba(var(--primary), 0.5) !important;
+    }
+    50% { 
+      box-shadow: 0 0 25px rgba(var(--primary), 0.4) !important;
+    }
+  }
+}

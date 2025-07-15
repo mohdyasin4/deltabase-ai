@@ -11,9 +11,9 @@ export function AccordionComponent() {
   const faqs = [
     {
       id: 1,
-      question: "Can I connect multiple databases with Deltabase?",
+      question: "Can I connect multiple databases with Refract?",
       answer:
-        "Absolutely, Deltabase supports multiple database connections including MySQL, PostgreSQL, MongoDB, and more.",
+        "Absolutely, Refract supports multiple database connections including MySQL, PostgreSQL, MongoDB, and more.",
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ export function AccordionComponent() {
     },
     {
       id: 3,
-      question: "How secure is my data on Deltabase?",
+      question: "How secure is my data on Refract?",
       answer:
         "We take data security very seriously, implementing state-of-the-art encryption and access controls.",
     },

@@ -56,7 +56,7 @@ export default function NavBar() {
   const { theme, resolvedTheme } = useTheme();
 
   return (
-    <div className="flex min-w-full fixed justify-between p-2 border-b z-10 dark:bg-black dark:bg-opacity-50 bg-white">
+    <div className="flex min-w-full fixed justify-between p-2 border-b border-opacity-5 z-10 dark:bg-transparent backdrop-blur-md bg-white">
       <div className="flex justify-between w-full min-[825px]:hidden">
         <Dialog>
           <SheetTrigger className="p-2 transition">
@@ -101,17 +101,17 @@ export default function NavBar() {
         <NavigationMenuList className="max-[825px]:hidden flex gap-3 w-[100%] justify-between">
           <Link href="/" className="pl-2 flex items-center" aria-label="Home">
             <Image
-              src="/images/lightLogo.svg"
-              alt="Deltabase Logo"
+              src="/images/refractlogo/lightLogo.svg"
+              alt="Refract Logo"
               width={135}
               height={135}
               className="block dark:hidden"
             />
             <Image
-              src="/images/darkLogo.svg"
+              src="/images/refractlogo/darkLogo.svg"
               width={135}
               height={135}
-              alt="Deltabase Logo"
+              alt="Refract Logo"
               className="hidden dark:block"
             />
             <span className="sr-only">Home</span>
@@ -119,11 +119,11 @@ export default function NavBar() {
         </NavigationMenuList>
         <NavigationMenuList>
           <NavigationMenuItem className="max-[825px]:hidden ml-5">
-            <NavigationMenuTrigger className="dark:bg-black dark:bg-opacity-50">
+            <NavigationMenuTrigger className="bg-transparent" >
               Features
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="flex flex-col w-[400px] gap-3 p-4 lg:w-[500px]">
+            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                 {components.map((component) => (
                   <ListItem
                     key={component.title}

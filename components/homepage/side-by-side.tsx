@@ -1,4 +1,4 @@
-import { Database, ChartBar, Users } from 'lucide-react' // Importing new icons suitable for Deltabase
+import { Database, ChartBar, Users } from 'lucide-react' // Importing new icons suitable for Refract
 import { FaChartLine } from 'react-icons/fa'
 import { OrbitingCirclesComponent } from './orbiting-circles'
 import { TITLE_TAILWIND_CLASS } from '@/utils/constants'
@@ -7,7 +7,7 @@ const features = [
   {
     name: 'Dynamic Data Visualization.',
     description:
-      'Transform your data into interactive and insightful visualizations effortlessly. Deltabase allows you to create customizable charts and dashboards that highlight key metrics.',
+      'Transform your data into interactive and insightful visualizations effortlessly. Refract allows you to create customizable charts and dashboards that highlight key metrics.',
     icon: ChartBar,
   },
   {
@@ -17,7 +17,7 @@ const features = [
   },
   {
     name: 'Multi-Database Support.',
-    description: 'Connect to various databases seamlessly. Deltabase supports MySQL, PostgreSQL, MongoDB, CSV, API and more, enabling you to manage all your data sources in one place.',
+    description: 'Connect to various databases seamlessly. Refract supports MySQL, PostgreSQL, MongoDB, CSV, API and more, enabling you to manage all your data sources in one place.',
     icon: Database,
   },
 ]
@@ -30,10 +30,10 @@ export default function SideBySide() {
           <div className="lg:pr-8 lg:pt-4">
             <div className="lg:max-w-lg">
               <p className={`${TITLE_TAILWIND_CLASS} mt-2 font-semibold tracking-tight dark:text-white text-gray-900`}>
-                Deltabase: Your Data, Visualized
+                Refract: Your Data, Visualized
               </p>
               <p className="mt-6 leading-8 text-gray-600 dark:text-gray-400">
-                Unlock the power of your data with Deltabase's robust data visualization and analytics tools.
+                Unlock the power of your data with Refract's robust data visualization and analytics tools.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (

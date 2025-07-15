@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeftIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { useEffect, useState } from "react";
 import Papa from "papaparse";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -37,14 +37,20 @@ import { useParseCsv } from "@/hooks/use-parse-csv";
 import { useUser } from "@clerk/nextjs";
 import { useUploadFile } from "@/hooks/use-upload-file";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import { useEffect } from "react";
 import { supabaseClient } from "@/lib/supabaseClient";
-import { create } from "domain";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-interface CsvImporterProps
-  extends React.ComponentPropsWithoutRef<typeof DialogTrigger> {
+// Use Shadcn's Select components
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+
+interface CsvImporterProps extends React.ComponentPropsWithoutRef<typeof DialogTrigger> {
   onImport: (data: Record<string, unknown>[]) => void;
   onClose: () => void;
   className?: string;
@@ -62,11 +68,11 @@ interface CsvMappingDialogProps {
   onSelectAll: () => void;
   onDeselectAll: () => void;
   onBack: () => void;
-  onImport: () => void;
+  onNext: () => void;
   className?: string;
 }
 
-export function CsvMappingDialog({
+function CsvMappingDialog({
   csvFields,
   csvData,
   selectedColumns,
@@ -78,7 +84,7 @@ export function CsvMappingDialog({
   onSelectAll,
   onDeselectAll,
   onBack,
-  onImport,
+  onNext,
   className,
 }: CsvMappingDialogProps) {
   return (
@@ -110,10 +116,7 @@ export function CsvMappingDialog({
                 {csvFields.map((field) => (
                   <TableHead
                     key={field}
-                    className={cn(
-                      "bg-gray-300/5 items-center gap-2 whitespace-nowrap py-2 border-r px-2",
-                      className
-                    )}
+                    className={cn("bg-gray-300/5 items-center gap-2 whitespace-nowrap py-2 border-r px-2", className)}
                   >
                     <div className="flex items-center gap-2 pl-2">
                       <Checkbox
@@ -123,35 +126,19 @@ export function CsvMappingDialog({
                       <div className="flex items-center">
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-48 justify-between"
-                            >
+                            <Button variant="outline" size="sm" className="w-48 justify-between">
                               {fieldMappings[field] || field}
-                              <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
+                              <span className="opacity-50">▾</span>
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 ">
+                          <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
                             <Command>
                               <CommandInput placeholder="Search field..." />
                               <CommandEmpty>No field found.</CommandEmpty>
                               <CommandList>
                                 <CommandGroup>
                                   {csvFields.map((fm) => (
-                                    <CommandItem
-                                      key={fm}
-                                      value={fm}
-                                      onSelect={() => onFieldChange(field, fm)}
-                                    >
-                                      <CheckIcon
-                                        className={cn(
-                                          "mr-2 size-4",
-                                          fieldMappings[field] === fm
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
+                                    <CommandItem key={fm} value={fm} onSelect={() => onFieldChange(field, fm)}>
                                       <span className="line-clamp-1">{fm}</span>
                                     </CommandItem>
                                   ))}
@@ -190,7 +177,6 @@ export function CsvMappingDialog({
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
-
       <DialogFooter className="flex items-center lg:justify-between w-full gap-4">
         <div className="flex items-center gap-4">
           <Button variant="outline" onClick={onSelectAll}>
@@ -205,10 +191,10 @@ export function CsvMappingDialog({
             Back
           </Button>
           <Button
-            onClick={onImport}
+            onClick={onNext}
             disabled={selectedColumns.length === 0 || connectionName === ""}
           >
-            Import Selected Fields
+            Next: Database
           </Button>
         </div>
       </DialogFooter>
@@ -216,32 +202,95 @@ export function CsvMappingDialog({
   );
 }
 
-export function CsvImporter({
-  onImport,
-  onClose,
-  className,
-  ...props
-}: CsvImporterProps) {
-  const [open, setOpen] = React.useState(true);
-  const [step, setStep] = React.useState<"upload" | "map">("upload");
-  const [csvData, setCsvData] = React.useState<any[]>([]);
-  const [csvFields, setCsvFields] = React.useState<string[]>([]);
-  const [selectedColumns, setSelectedColumns] = React.useState<string[]>([]);
-  const [fieldMappings, setFieldMappings] = React.useState<
-    Record<string, string>
-  >({});
-  const [connectionName, setConnectionName] = React.useState<string>("");
+interface CsvDatabaseDialogProps {
+  databaseConnections: any[];
+  selectedDatabaseId: string;
+  tableName: string;
+  onDatabaseSelect: (id: string) => void;
+  onTableNameChange: (name: string) => void;
+  onBack: () => void;
+  onUpload: () => void;
+  className?: string;
+}
 
-  const {
-    data: parsedData,
-    error,
-    onParse,
-    onFieldChange,
-    onFieldsReset,
-  } = useParseCsv({
+function CsvDatabaseDialog({
+  databaseConnections,
+  selectedDatabaseId,
+  tableName,
+  onDatabaseSelect,
+  onTableNameChange,
+  onBack,
+  onUpload,
+  className,
+}: CsvDatabaseDialogProps) {
+  console.log("Database Connections:", databaseConnections);
+  return (
+    <DialogContent className="overflow-hidden p-8 sm:max-w-2xl" showOverlay={false}>
+      <DialogHeader>
+        <DialogTitle>Select Database & Table</DialogTitle>
+        <DialogDescription>
+          Choose which database to upload the CSV data as a table and specify the table name.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="mb-4">
+        <Label htmlFor="database_connection" className="block text-sm font-medium">
+          Database Connection
+        </Label>
+        <Select value={selectedDatabaseId} onValueChange={onDatabaseSelect}>
+          <SelectTrigger className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            <SelectValue placeholder="Select Database Connection..." />
+          </SelectTrigger>
+          <SelectContent>
+            {databaseConnections.map((connection) => (
+              <SelectItem key={connection.id} value={connection.id}>
+                {connection.connection_name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="mb-4">
+        <Label htmlFor="table_name" className="block text-sm font-medium">
+          Table Name
+        </Label>
+        <Input
+          type="text"
+          id="table_name"
+          value={tableName}
+          onChange={(e) => onTableNameChange(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+      </div>
+      <DialogFooter className="flex items-center justify-end gap-4">
+        <Button variant="outline" onClick={onBack}>
+          Back
+        </Button>
+        <Button onClick={onUpload} disabled={!selectedDatabaseId || tableName === ""}>
+          Upload CSV
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  );
+}
+
+export function CsvImporter({ onImport, onClose, className, ...props }: CsvImporterProps) {
+  const [open, setOpen] = useState(true);
+  // Three steps: "upload", "map", and "database"
+  const [step, setStep] = useState<"upload" | "map" | "database">("upload");
+  const [csvData, setCsvData] = useState<any[]>([]);
+  const [csvFields, setCsvFields] = useState<string[]>([]);
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
+  const [fieldMappings, setFieldMappings] = useState<Record<string, string>>({});
+  const [connectionName, setConnectionName] = useState<string>("");
+
+  // New state for database upload
+  const [databaseConnections, setDatabaseConnections] = useState<any[]>([]);
+  const [selectedDatabaseId, setSelectedDatabaseId] = useState<string>("");
+  const [tableName, setTableName] = useState<string>("");
+
+  const { data: parsedData, error, onParse, onFieldChange, onFieldsReset } = useParseCsv({
     fields: [],
     onSuccess: (results) => {
-      // Automatically move to the "map" step after successful parsing
       const fields = Object.keys(results[0]);
       setCsvData(results);
       setCsvFields(fields);
@@ -255,108 +304,92 @@ export function CsvImporter({
   const bucketName = `user-${authUserId}`;
 
   const { onUpload, uploadedFiles, isUploading } = useUploadFile(bucketName);
+  const uploadedFile = uploadedFiles[0];
 
-  const uploadedFile = uploadedFiles[0]; // Assuming only one file is uploaded
+  // Fetch available database connections from Supabase
+  useEffect(() => {
+    async function fetchDatabaseConnections() {
+      if (!authUserId) return;
+      const { data, error } = await supabaseClient
+        .from("database_connections")
+        .select("*")
+        .eq("user_id", authUserId);
+      if (error) {
+        console.error("Error fetching database connections:", error.message);
+      } else {
+        setDatabaseConnections(data || []);
+      }
+    }
+    fetchDatabaseConnections();
+  }, [authUserId]);
 
+  // Set up initial field mappings whenever csvFields change
   useEffect(() => {
     const initialMappings: Record<string, string> = {};
     csvFields.forEach((field, index) => {
-      // Map each field to a corresponding CSV field by default (or index-based)
       initialMappings[field] = csvFields[index] || csvFields[0];
     });
     setFieldMappings(initialMappings);
   }, [csvFields]);
 
   const handleFieldChange = (oldField: string, newField: string) => {
-    setFieldMappings((prev) => {
-      const newMappings = { ...prev };
-      newMappings[oldField] = newField;
-      return newMappings;
-    });
+    setFieldMappings((prev) => ({ ...prev, [oldField]: newField }));
   };
 
   const handleColumnSelection = (field: string) => {
-    setSelectedColumns((prev) => {
-      if (prev.includes(field)) {
-        return prev.filter((f) => f !== field);
-      }
-      return [...prev, field];
-    });
+    setSelectedColumns((prev) => (prev.includes(field) ? prev.filter((f) => f !== field) : [...prev, field]));
   };
 
-  // Import CSV data with metadata
-  const handleImport = async () => {
-    if (!authUserId) {
-      console.error("User ID not found");
-      return;
-    }
-
+  // Function to upload CSV data into the selected external database.
+  // This function calls an API route that uses your databaseUtils functions.
+  const uploadCsvToDatabase = async () => {
     try {
-      // Save metadata in Supabase
-      const { data: userStorageData, error: userStorageError } =
-        await supabaseClient.from("users_storage").select("id").eq("user_id", authUserId);
-
-      if (userStorageError || !userStorageData || userStorageData.length === 0) {
-        console.error("Error fetching user storage:", userStorageError?.message );
-        return;
-      }
-
-      const userStorageId = userStorageData[0]?.id;
-
-      if (!userStorageId) {
-        console.error("User storage ID is missing");
-        return;
-      }
-
-      console.log("file path", uploadedFile.path);
-      console.log("file name", uploadedFile.name);
-      console.log("file url", uploadedFile.url);
-
-      // Save file metadata
-      const metadata = uploadedFiles.map((file) => ({
-        user_id: authUserId,
-        bucket_name: bucketName,
-        file_name: file.name,
-        selectedFields: selectedColumns,
-        connection_name: connectionName,
-        createdat: new Date(),
-        updatedat: new Date(),
-      }));
-
-      const { error: metadataError } = await supabaseClient.from("csvData").insert(metadata);
-
-      if (metadataError) {
-        console.error("Error saving metadata:", metadataError.message);
-        return;
-      }
-
-      // Prepare formatted CSV data for import
-      const formattedData = csvData.map((row) => {
-        const formattedRow: Record<string, string | number> = {};
-        selectedColumns.forEach((column) => {
-          const mappedField = fieldMappings[column];
-          formattedRow[mappedField] = row[column];
-        });
-        return formattedRow;
+      const payload = {
+        connectionId: selectedDatabaseId,
+        tableName,
+        data: csvData.map((row) => {
+          const formattedRow: Record<string, string | number> = {};
+          selectedColumns.forEach((column) => {
+            const mappedField = fieldMappings[column];
+            formattedRow[mappedField] = row[column];
+          });
+          return formattedRow;
+        }),
+      };
+      const res = await fetch("/api/upload-csv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-
-      console.log("Formatted Data:", formattedData);
-      onImport(formattedData);
-    } catch (error) {
-      console.error("Unexpected error during import:", error);
-    } finally {
-      // Reset dialog and states
-      setOpen(false);
-      setStep("upload");
-      setCsvData([]);
-      setCsvFields([]);
-      setSelectedColumns([]);
-      setFieldMappings({});
-      setConnectionName("");
+      if (!res.ok) {
+        throw new Error("Failed to upload CSV data");
+      }
+      // Optionally call onImport if needed
+      onImport(payload.data);
+    } catch (error: any) {
+      console.error("Error uploading CSV data:", error.message);
     }
   };
 
-  if (open === false) {
+  // Transition handlers for the steps
+  const handleMappingNext = () => setStep("database");
+  const handleDatabaseBack = () => setStep("map");
+
+  // Reset states and close dialog after finishing
+  const handleFinish = async () => {
+    await uploadCsvToDatabase();
+    setOpen(false);
+    setStep("upload");
+    setCsvData([]);
+    setCsvFields([]);
+    setSelectedColumns([]);
+    setFieldMappings({});
+    setConnectionName("");
+    setSelectedDatabaseId("");
+    setTableName("");
+  };
+
+  if (!open) {
     onClose();
   }
 
@@ -368,17 +401,6 @@ export function CsvImporter({
           multiple={false}
           maxSize={4 * 1024 * 1024}
           maxFileCount={1}
-          /**
-           * alternatively this can be used without uploading the file
-           */
-          // onValueChange={(files) => {
-          //   const file = files[0]
-          //   if (!file) return
-
-          //   onParse({ file, limit: 1001 })
-
-          //   setStep("map")
-          // }}
           onUpload={async (files) => {
             const file = files[0];
             if (!file) return;
@@ -387,7 +409,7 @@ export function CsvImporter({
           }}
           disabled={isUploading}
         />
-      ) : (
+      ) : step === "map" ? (
         <CsvMappingDialog
           csvFields={csvFields}
           csvData={csvData}
@@ -400,7 +422,18 @@ export function CsvImporter({
           onSelectAll={() => setSelectedColumns([...csvFields])}
           onDeselectAll={() => setSelectedColumns([])}
           onBack={() => setStep("upload")}
-          onImport={handleImport}
+          onNext={handleMappingNext}
+          className={className}
+        />
+      ) : (
+        <CsvDatabaseDialog
+          databaseConnections={databaseConnections}
+          selectedDatabaseId={selectedDatabaseId}
+          tableName={tableName}
+          onDatabaseSelect={setSelectedDatabaseId}
+          onTableNameChange={setTableName}
+          onBack={handleDatabaseBack}
+          onUpload={handleFinish}
           className={className}
         />
       )}

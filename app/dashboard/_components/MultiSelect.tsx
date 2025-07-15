@@ -29,47 +29,67 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface MultiSelectSelectProps {
+  columns: string[];
+  rows: string[];
+  allColumns: string[];
+  connectionId: string;
+  tableName: string;
+  allColumsn: string[];
+  columnMetadata: any[];
+  selectedAggregate: string | null;
+  selectedValues: string[];
+  aggregateOptions: any[];
+  currentOptions: any[];
+  groupByValue: any[];
+  isSelectedMap: { [key: string]: boolean };
+  setSelectedAggregate: (val: string | null) => void;
+  setSelectedValues: (val: string[]) => void;
+  setCurrentOptions: (val: any[]) => void;
+  setAllColumns: (columns: string[]) => void;
+  setSelectedGroupBy: (val: string | []) => void;
+  setIsSelectedMap: (val: { [key: string]: boolean }) => void;
+  setSqlQuery: (query: string) => void;
+  fetchDefaultQuery: () => void;
+  setColumnType: (column: string, type: string) => void;
   setVisualizationType: (type: string) => void;
   setRows: (rows: string[]) => void;
   setColumns: (columns: string[]) => void;
-  columns: string[];
-  rows: string[];
+  setGroupByValue: (val: any[]) => void;
   setQueryLoading: (val: boolean) => void;
-  connectionId: string;
-  setSqlQuery: (query: string) => void;
-  tableName: string;
+  setPrimaryKeys: (keys: string) => void;
+  fetchDbData: ({aggregate, column}: {aggregate: string, column?: string}) => void;
 }
 
-type Option = {
-  value: string;
-  label: string;
-};
-
-const aggregateOptions: Option[] = [
-  { value: "count", label: "Count of ..." },
-  { value: "sum", label: "Sum of ..." },
-  { value: "avg", label: "Average of ..." },
-  { value: "min", label: "Minimum of ..." },
-  { value: "max", label: "Maximum of ..." },
-];
-
 const MultiSelectSelect = ({
-  setVisualizationType,
   setRows,
   setColumns,
   setQueryLoading,
-  columns,
-  rows,
+  allColumns,
+  setAllColumns,
+  setColumnType,
   connectionId,
-  setSqlQuery,
   tableName,
+  setSqlQuery,
+  setPrimaryKeys,
+  selectedAggregate,
+  selectedValues,
+  aggregateOptions,
+  currentOptions,
+  setSelectedGroupBy,
+  setIsSelectedMap,
+  groupByValue,
+  setGroupByValue,
+  isSelectedMap,
+  setSelectedAggregate,
+  setSelectedValues,
+  setCurrentOptions,
+  setVisualizationType,
+  columns,
+  columnMetadata,
+  rows,
+  fetchDefaultQuery,
+  fetchDbData,
 }: MultiSelectSelectProps) => {
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
-  const [currentOptions, setCurrentOptions] =
-    useState<Option[]>(aggregateOptions);
-  const [columnMetadata, setColumnMetadata] = useState<
-    { name: string; type: string }[]
-  >([]);
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -97,110 +117,60 @@ const MultiSelectSelect = ({
     }
   };
 
-  const fetchDbData = async (aggregate: string, column?: string) => {
-    try {
-      setQueryLoading(true);
-      const params = new URLSearchParams();
-      params.append("aggregate", aggregate);
-      if (column) params.append("column", column);
-
-      const response = await fetch(
-        `/api/database/${connectionId}/tables/${tableName}?${params.toString()}`,
-        { method: "GET" }
-      );
-      if (!response.ok) throw new Error("Failed to fetch data");
-      const data = await response.json();
-      setRows(data.rows);
-      setColumns(data.columns);
-      setSqlQuery(data.query);
-      setQueryLoading(false);
-      if (data.rows.length === 1) {
-        setVisualizationType("number");
-      } else {
-        setVisualizationType("table");
-      }
-    } catch (error) {
-      console.error("Error fetching database details:", error);
-      setQueryLoading(false);
-    }
-  };
-
-  const fetchDefaultQuery = async () => {
-    try {
-      setQueryLoading(true);
-      const response = await fetch(
-        `/api/database/${connectionId}/tables/${tableName}`,
-        { method: "GET" }
-      );
-      if (!response.ok) throw new Error("Failed to fetch default query");
-      const data = await response.json();
-
-      setRows(data.rows);
-      setColumns(data.columns);
-      setColumnMetadata(data.columnMetadata || []);
-      setSqlQuery(data.query);
-      setQueryLoading(false);
-    } catch (error) {
-      console.error("Error fetching default query:", error);
-      setQueryLoading(false);
-    }
-  };
-
   const handleSelect = (currentValue: string) => {
+    console.log("Step:", step, "Selected:", currentValue);
+
     if (step === 1) {
-      setSelectedValues([currentValue]);
-
+      setSelectedValues([]); // Clear previous selections
       if (currentValue === "count") {
-        setCurrentOptions([
-          { value: "", label: "All rows", icon: <Table2 size={16} /> },
-          ...columns.map((col) => ({
-            value: col,
-            label: col,
-            icon: <BarChart2 size={16} />,
-          })),
-        ]);
+        setSelectedAggregate("count");
+        setOpen(false);
+        setStep(1);
+        setCurrentOptions(aggregateOptions);
+        fetchDbData({aggregate:"count"}); // Fetch count directly
       } else {
+        setSelectedAggregate(currentValue);
         setCurrentOptions(getNumericColumns());
+        setStep(2);
       }
+    } else if (step === 2) {
+      if (!selectedAggregate) return; // Prevent errors if no aggregate function is set
 
-      setStep(2);
-    } else {
-      const aggregate = selectedValues[0];
-      const column = currentValue === "*" ? "*" : currentValue;
-      setSelectedValues((prev) => [...prev, currentValue]);
+      console.log("Selected column:", currentValue);
+      setSelectedValues([currentValue]); // Ensure array format
+
       setOpen(false);
       setStep(1);
       setCurrentOptions(aggregateOptions);
-      fetchDbData(aggregate, column);
+      fetchDbData({aggregate: selectedAggregate, column: currentValue}); // Fetch data with correct values
     }
   };
 
   const handleClearSelection = () => {
-    setSelectedValues([]);
+    setSelectedAggregate(null);
+    setSelectedValues([]); // Clear selected values to ensure isAggregateComplete becomes false
     setStep(1);
     setCurrentOptions(aggregateOptions);
+    setGroupByValue([]);
     fetchDefaultQuery();
     setVisualizationType("table");
-  };
-
-  useEffect(() => {
-    fetchDefaultQuery();
-  }, [connectionId, tableName]);
+  };  
 
   return (
     <div className="w-64">
-      {selectedValues.length === 2 ? (
+      {selectedAggregate && step === 1 ? (
         <div className="flex items-center">
           <Button
-            value={"default"}
-            size={"sm"}
+            size="sm"
             onClick={handleClearSelection}
             className="hover:bg-yellow-300 gap-2 flex items-center"
           >
-            {selectedValues[0].toUpperCase()}
-            <ChevronRight size={"16"} />
-            {selectedValues[1].toUpperCase()}
-            <XIcon size={"18"} />
+            {selectedAggregate === "count" 
+              ? selectedAggregate.toUpperCase()
+              : `${selectedAggregate.toUpperCase()} (${
+                  selectedValues[0] || "?"
+                })`}
+            <XIcon size={18} />
           </Button>
         </div>
       ) : (
@@ -209,6 +179,7 @@ const MultiSelectSelect = ({
           onOpenChange={(isOpen) => {
             setOpen(isOpen);
             if (!isOpen) {
+              // If popover closes, reset to step 1 and clear temporary selection (but not the stored aggregate)
               setStep(1);
               setSelectedValues([]);
               setCurrentOptions(aggregateOptions);
@@ -217,13 +188,16 @@ const MultiSelectSelect = ({
         >
           <PopoverTrigger asChild>
             <Button
-              variant="default"
+              variant="dashed"
               role="combobox"
               size="sm"
               aria-expanded={open}
               className="w-[180px] h-10 justify-between"
+              onClick={() => setOpen(true)}
             >
-              {"Select an option..."}
+              {selectedAggregate
+                ? `Aggregate: ${selectedAggregate.toUpperCase()}`
+                : "Add a function..."}
               <span
                 className={`transition-transform duration-200 ${
                   open ? "-rotate-180" : "rotate-0"
@@ -233,7 +207,6 @@ const MultiSelectSelect = ({
               </span>
             </Button>
           </PopoverTrigger>
-
           <PopoverContent
             className="w-[300px] mt-1 p-0 shadow-sm"
             align="start"
@@ -242,7 +215,7 @@ const MultiSelectSelect = ({
               <CommandGroup>
                 <div className="w-full flex items-center gap-2 text-sm font-semibold p-2">
                   <Table2 color="#ffcc19" height={16} width={16} />
-                  {step == 2 ? "Select Column" : "Aggregate Functions"}
+                  {step === 2 ? "Select Column" : "Aggregate Functions"}
                 </div>
               </CommandGroup>
               <div className="border-t border-b border-accent">

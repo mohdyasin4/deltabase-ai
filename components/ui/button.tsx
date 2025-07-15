@@ -16,6 +16,8 @@ const buttonVariants = cva(
         secondary: 'bg-accent text-accent-foreground hover:text-primary hover:bg-accent/90', 
         ghost: "hover:bg-accent hover:text-primary",
         link: "text-primary underline-offset-4 hover:underline",
+        dashed:
+          "border-dashed border-2 border-primary text-primary hover:bg-primary/90 hover:text-primary-foreground hover:border-none border-offset-2",
         expandIcon:
           "group relative text-primary-foreground bg-primary hover:bg-primary/90",
         ringHover:

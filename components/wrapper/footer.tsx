@@ -26,7 +26,7 @@ export default function Footer() {
                     >
                         <div className="mt-8 space-y-4 lg:mt-0">
                             <div>
-                                <h3 className="text-2xl font-medium">Stay Updated with Deltabase</h3>
+                                <h3 className="text-2xl font-medium">Stay Updated with Refract</h3>
                                 <p className="mt-4 max-w-lg">
                                     Sign up for our newsletter to receive the latest news, updates, and insights on data analytics and visualization.
                                 </p>
@@ -50,13 +50,13 @@ export default function Footer() {
                                 <p className="font-medium">Connect with Us</p>
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <a href="https://twitter.com/deltabase" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> Twitter </a>
+                                        <a href="https://twitter.com/Refract" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> Twitter </a>
                                     </li>
                                     <li>
-                                        <a href="https://www.linkedin.com/company/deltabase" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> LinkedIn </a>
+                                        <a href="https://www.linkedin.com/company/Refract" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> LinkedIn </a>
                                     </li>
                                     <li>
-                                        <a href="https://www.youtube.com/channel/deltabase" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> YouTube </a>
+                                        <a href="https://www.youtube.com/channel/Refract" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75"> YouTube </a>
                                     </li>
                                 </ul>
                             </div>
@@ -86,7 +86,7 @@ export default function Footer() {
                                     <a href="/privacy" target="_blank" rel="noopener noreferrer" className="transition hover:opacity-75">Privacy Policy </a>
                                 </li>
                             </ul>
-                            <p className="mt-8 text-xs">&copy; 2024. Deltabase LLC. All rights reserved.</p>
+                            <p className="mt-8 text-xs">&copy; 2024. Refract LLC. All rights reserved.</p>
                         </div>
                     </div>
                 </div>

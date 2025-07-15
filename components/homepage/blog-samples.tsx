@@ -6,7 +6,7 @@ export default function UseCasesSection() {
     {
       id: 1,
       title: "Retail Analytics",
-      description: "Analyze sales patterns, optimize inventory, and forecast demand using Deltabase dashboards.",
+      description: "Analyze sales patterns, optimize inventory, and forecast demand using Refract dashboards.",
       icon: <TrendingUp className="text-blue-600 w-6 h-6" />,
     },
     {
@@ -54,9 +54,9 @@ export default function UseCasesSection() {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-4">How Deltabase Empowers Businesses</h1>
+      <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-4">How Refract Empowers Businesses</h1>
       <p className="text-gray-600 dark:text-gray-400 mb-6 text-center">
-        Discover how Deltabase can enhance your data strategies across various industries.
+        Discover how Refract can enhance your data strategies across various industries.
       </p>
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 max-w-full">
         {useCases.map((useCase) => (

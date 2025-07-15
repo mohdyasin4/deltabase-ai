@@ -27,6 +27,7 @@ import supabaseClient from "@/lib/supabaseClient";
 export interface FilterRow {
   id: number;
   column: string;
+  type?: string;
   operation: string;
   value: string;
   operator?: string; // AND / OR
@@ -48,8 +49,25 @@ interface FilterDialogProps {
   connectionId: string;
   type: string;
   tableName: string;
+  applyFilters?: (newFilters?: FilterRow[]) => Promise<void>;
   children: React.ReactNode;
+  isOpen: boolean;
+  onOpen: () => void;
+  onOpenChange: (open: boolean) => void;
 }
+
+export const operations = [
+  { label: "Equal", value: "=" },
+  { label: "Not Equal", value: "!=" },
+  { label: "Greater Than", value: ">" },
+  { label: "Less Than", value: "<" },
+  { label: "Greater Than or Equal", value: ">=" },
+  { label: "Less Than or Equal", value: "<=" },
+  { label: "Contains", value: "LIKE" },
+  { label: "Does Not Contain", value: "NOT LIKE" },
+  { label: "Starts With", value: "LIKE" },
+  { label: "Ends With", value: "LIKE" },
+];
 
 // Wrap the component with forwardRef
 const FilterDialog = forwardRef<any, FilterDialogProps>(
@@ -69,28 +87,26 @@ const FilterDialog = forwardRef<any, FilterDialogProps>(
       connectionId,
       tableName,
       type,
+      applyFilters,
       children,
+      isOpen,
+      onOpen,
+      onOpenChange,
     },
     ref
   ) => {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [value, setValue] = useState("");
     const [originalQuery, setOriginalQuery] = useState("");
     // Use the tableName prop as the default effective table name
     const [effectiveTableName, setEffectiveTableName] = useState(tableName);
 
-    const operations = [
-      { label: "Equal", value: "=" },
-      { label: "Not Equal", value: "!=" },
-      { label: "Greater Than", value: ">" },
-      { label: "Less Than", value: "<" },
-      { label: "Greater Than or Equal", value: ">=" },
-      { label: "Less Than or Equal", value: "<=" },
-      { label: "Contains", value: "LIKE" },
-      { label: "Does Not Contain", value: "NOT LIKE" },
-      { label: "Starts With", value: "LIKE" },
-      { label: "Ends With", value: "LIKE" },
-    ];
+     // Ensure there's always at least one filter row (for new filters)
+  useEffect(() => {
+    if (filters.length === 0) {
+      // Create a default filter row without an operator
+      setFilters([{ id: Date.now(), column: "", operation: "", value: "", valueOptions: [] }]);
+    }
+  }, []);
 
     const addFilter = (operator: string) => {
       const newFilter: FilterRow = {
@@ -112,8 +128,7 @@ const FilterDialog = forwardRef<any, FilterDialogProps>(
     };
 
     const generateSQLQuery = () => {
-      if (filters.length === 0)
-        return `SELECT * FROM ${effectiveTableName}`;
+      if (filters.length === 0) return `SELECT * FROM ${effectiveTableName}`;
 
       const whereClauses = filters.map((filter, index) => {
         const condition = `${filter.column} ${filter.operation} '${filter.value}'`;
@@ -171,42 +186,6 @@ const FilterDialog = forwardRef<any, FilterDialogProps>(
         });
       }
     }, [datasetId, type]);
-    
-    const applyFilters = async (newFilters?: FilterRow[]) => {
-      // Use newFilters if provided; otherwise fallback to the filters prop
-      const filtersToUse = newFilters || filters;
-      console.log("New Filters:", filtersToUse);
-    
-      if (!originalQuery) {
-        setOriginalQuery(sqlQuery);
-      }
-      setQueryLoading(true);
-      try {
-        const filtersJSON = JSON.stringify(filtersToUse);
-        console.log("Filters JSON:", filtersJSON);
-        const url = `/api/database/${connectionId}/tables/${effectiveTableName}?filters=${encodeURIComponent(filtersJSON)}`;
-        const res = await fetch(url);
-        const data = await res.json();
-    
-        if (isOpen === true) {
-          onOpenChange();
-        }
-        setRows(data.rows);
-        setSqlQuery(data.query);
-        setColumns(data.columns);
-        toast.success("Filter Applied");
-      } catch (error) {
-        console.error("Error fetching filtered data:", error);
-      } finally {
-        setQueryLoading(false);
-      }
-    };
-    
-    useEffect(() => {
-      if (onFilterChange) {
-        onFilterChange(filters);
-      }
-    }, [filters, onFilterChange]);
 
     const clearFilters = async () => {
       setQueryLoading(true);
@@ -342,9 +321,7 @@ const FilterDialog = forwardRef<any, FilterDialogProps>(
                             )}
                             <div
                               className={`grid grid-cols-1 gap-2 items-center pb-2 ${
-                                index > 0
-                                  ? "md:grid-cols-10"
-                                  : "md:grid-cols-9"
+                                index > 0 ? "md:grid-cols-10" : "md:grid-cols-9"
                               }`}
                             >
                               <Select
@@ -459,7 +436,9 @@ const FilterDialog = forwardRef<any, FilterDialogProps>(
                       variant="default"
                       onClick={async () => {
                         setQueryLoading(true);
-                        await applyFilters();
+                        if (applyFilters) {
+                          await applyFilters();
+                        }
                         setQueryLoading(false);
                       }}
                     >
