@@ -21,23 +21,21 @@
    ```
 
 3. Set up environment variables:
-   Create a `.env` file in the root directory with the following variables:
+   Copy the example environment file and configure your values:
    ```
-   SUPABASE_URL=<your-supabase-project-url>
-   SUPABASE_SERVICE_KEY=<your-supabase-service-key>
-
-   # If using Stripe
-   STRIPE_SECRET_KEY=<your-stripe-secret-key>
-   NEXT_PUBLIC_STRIPE_PRICE_ID=<your-stripe-price-id>
-
-   # If using Clerk
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
-   CLERK_SECRET_KEY=<your-clerk-secret-key>
-   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-   NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
-   NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+   cp .env.example .env
    ```
+   
+   Then edit the `.env` file with your actual API keys and configuration values:
+   - **Clerk**: Authentication service keys
+   - **Supabase**: Database and service role keys
+   - **Stripe**: Payment processing keys (if using payments)
+   - **Upstash Redis**: Caching service keys
+   - **Gemini AI**: Google AI API key for SQL generation
+   - **UploadThing**: File upload service keys
+   - **Text-to-Speech**: Optional API keys for voice features
+   
+   All required environment variables are documented in `.env.example`
 
 4. Configure features:
    In `config.ts`, set the desired features:
